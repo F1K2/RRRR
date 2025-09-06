@@ -1,16 +1,280 @@
---[[
- .____                  ________ ___.    _____                           __                
- |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
- |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
- |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
- |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
-         \/          \/         \/    \/                \/     \/     \/                   
-          \_Welcome to LuaObfuscator.com   (Alpha 0.10.9) ~  Much Love, Ferib 
-
-]]--
-
-local v0=string.char;local v1=string.byte;local v2=string.sub;local v3=bit32 or bit ;local v4=v3.bxor;local v5=table.concat;local v6=table.insert;local function v7(v37,v38) local v39={};_G.Cs={UQSDDAA=3,YASDMRXA=1,YASa0AVV=2};for v80=1, #v37 do v6(v39,v0(v4(v1(v2(v37,v80,v80 +  #Cs + 1 )),v1(v2(v38,1 + (v80% #v38) ,1 + (v80% #v38) + 1 )))%256 ));end return v5(v39);end if (syn and syn.queue_on_teleport) then syn.queue_on_teleport([[
+-- 🔹 Auto reload après téléport (Rivals)
+if syn and syn.queue_on_teleport then
+    syn.queue_on_teleport([[
         loadstring(game:HttpGet("https://raw.githubusercontent.com/F1K2/RRRR/refs/heads/main/rivals.lua"))()
-    ]]);elseif queue_on_teleport then queue_on_teleport([[
+    ]])
+elseif queue_on_teleport then
+    queue_on_teleport([[
         loadstring(game:HttpGet("https://raw.githubusercontent.com/F1K2/RRRR/refs/heads/main/rivals.lua"))()
-    ]]);end local v8=game:GetService(v7("\225\207\218\60\227\169\212","\126\177\163\187\69\134\219\167"));local v9=game:GetService(v7("\17\216\36\246\249\49\219\35\198\249","\156\67\173\74\165"));local v10=game:GetService(v7("\1\164\76\4\149\40\86\33\163\122\19\174\48\79\55\178","\38\84\215\41\118\220\70"));local v11=workspace.CurrentCamera;local v12=v8.LocalPlayer;local v13,v14=pcall(function() return loadstring(game:HttpGet(v7("\88\2\54\2\237\10\89\109\1\247\66\31\55\1\176\93\19\44\7\177\66\23\59\20\247\85\26\38","\158\48\118\66\114")))();end);if ( not v13 or  not v14) then local v81=0 + 0 ;while true do if (v81==0) then warn("Rayfield n'a pas pu être chargé. UI désactivée.");return;end end end local v15=v14:CreateWindow({[v7("\133\37\29\51","\155\203\68\112\86\19\197")]=v7("\18\137\98\168\0\80\240\250","\152\38\189\86\156\32\24\133"),[v7("\208\88\166\66\245\89\160\114\245\67\171\67","\38\156\55\199")]=v7("\132\114\125\44\26\122\253\3\252\41\40\124\83\92\239\65\230\51","\35\200\29\28\72\115\20\154"),[v7("\53\176\208\219\132\34\51\42\170\211\203\132\56\56\28","\84\121\223\177\191\237\76")]=v7("\158\101\249\224\113\16\17\200\182\84\198\180","\161\219\54\169\192\90\48\80"),[v7("\125\77\7\34\69\71\53\12\98\71\25\39\64\76\4","\69\41\34\96")]=Enum.KeyCode.RightShift,[v7("\159\204\217\12\11\44\169\209\214\30\11\36\178\240\214\28\11\37\187","\75\220\163\183\106\98")]={[v7("\39\180\138\53\213\7\190","\185\98\218\235\87")]=true,[v7("\237\51\43\226\219\184\229\61\42\227","\202\171\92\71\134\190")]=4444,[v7("\15\200\32\141\7\192\33\141","\232\73\161\76")]=v7("\168\220\86\73\23\181\222\81","\126\219\185\34\61")},[v7("\40\199\77\113\113\101\247","\135\108\174\62\18\30\23\147")]={[v7("\147\231\43\201\20\171\55","\167\214\137\74\171\120\206\83")]=true,[v7("\162\254\36\84\236\162","\199\235\144\82\61\152")]=v7("\21\38\142\61\83\34\136\29\20\32","\75\103\118\217"),[v7("\245\81\125\17\180\28\194\70\90\27\176\16\212","\126\167\52\16\116\217")]=false},[v7("\227\43\57\179\173\10\232\205\35","\156\168\78\64\224\212\121")]=false});local v16=v15:CreateTab(v7("\38\231\168\204\8\250","\174\103\142\197"));local v17=v15:CreateTab(v7("\115\27\111","\152\54\72\63\88\69\62"));local v18=v15:CreateTab(v7("\228\200\239\69\209\214","\60\180\164\142"));local v19={[v7("\121\87\8\43\40\249\55\86\95\7\37\34\233","\114\56\62\101\73\71\141")]=false,[v7("\153\224\214\198\183\253\232\201\183\230\207\204\182\236\200\215","\164\216\137\187")]=5 + 1 ,[v7("\243\239\60\176\169\234\45\253\208","\107\178\134\81\210\198\158")]=51 + 69 ,[v7("\25\7\143\196\165\44\62\144\195\174\49\13\150\207\165\54","\202\88\110\226\166")]=true,[v7("\226\6\143\245\197\215\59\131\229\205\198\27\178\246\216\215","\170\163\111\226\151")]=v7("\57\53\179\60","\73\113\80\210\88\46\87"),[v7("\164\31\253\55\233\128\46\193\23\227","\135\225\76\173\114")]=false,[v7("\63\222\136\150\165\177\171\57\226\180\191\190","\199\122\141\216\208\204\221")]=Color3.fromRGB(1504 -(363 + 1141) ,1835 -(1183 + 397) ,0 -0 ),[v7("\136\238\32\223\109\226\161\212\30\245\91\249\161\210\2","\150\205\189\112\144\24")]=Color3.fromRGB(187 + 68 ,0,0 + 0 ),[v7("\12\138\185\69\10\129\5\21\15\145\178\92","\112\69\228\223\44\100\232\113")]=false,[v7("\250\16\36\223\191\108","\230\180\127\103\179\214\28")]=false};local function v20() return v10:IsMouseButtonPressed(Enum.UserInputType.MouseButton2);end local function v21() local v40=Vector2.new(v11.ViewportSize.X/(1977 -(1913 + 62)) ,v11.ViewportSize.Y/2 );local v41,v42,v43=nil,nil,math.huge;for v82,v83 in ipairs(v8:GetPlayers()) do if ((v83~=v12) and v83.Character and v83.Character:FindFirstChild(v19.AimbotTargetPart)) then local v105=0;local v106;while true do if (v105==(0 + 0)) then v106=v83.Character:FindFirstChildOfClass(v7("\164\16\82\71\234\78\233\136","\128\236\101\63\38\132\33"));if (v106 and (v106.Health>0)) then local v144=0;local v145;local v146;local v147;while true do if ((0 -0)==v144) then v145=v83.Character[v19.AimbotTargetPart];v146,v147=v11:WorldToViewportPoint(v145.Position);v144=1934 -(565 + 1368) ;end if (v144==(3 -2)) then if v147 then local v152=0;local v153;while true do if (v152==(1661 -(1477 + 184))) then v153=(Vector2.new(v146.X,v146.Y) -v40).Magnitude;if ((v153<v43) and (v153<=v19.AimbotFOV)) then v41=v83;v42=v145;v43=v153;end break;end end end break;end end end break;end end end end return v41,v42;end local function v22(v44,v45) local v46=0 -0 ;local v47;local v48;local v49;local v50;while true do if (v46==(0 + 0)) then if ( not v45 or  not v44.Character) then return;end v47=v45.Position;v46=1;end if (v46==3) then if mousemoverel then mousemoverel(v50.X,v50.Y);end break;end if (v46==(857 -(564 + 292))) then if (v19.AimbotPrediction and v44.Character:FindFirstChild(v7("\132\188\28\69\184\228\198\168\155\30\75\162\219\206\190\189","\175\204\201\113\36\214\139"))) then v47=v47 + (v44.Character.HumanoidRootPart.Velocity * (0.05 -0)) ;end v48=v11:WorldToViewportPoint(v47);v46=5 -3 ;end if (v46==2) then local v108=304 -(244 + 60) ;while true do if (v108==(0 + 0)) then v49=v10:GetMouseLocation();v50=(Vector2.new(v48.X,v48.Y) -v49)/v19.AimbotSmoothness ;v108=477 -(41 + 435) ;end if (v108==1) then v46=3;break;end end end end end local v23=Drawing.new(v7("\100\197\39\223\8\66","\100\39\172\85\188"));v23.Visible=v19.AimbotEnabled;v23.Radius=v19.AimbotFOV;v23.Color=Color3.fromRGB(1256 -(938 + 63) ,0 + 0 ,1125 -(936 + 189) );v23.Thickness=1 + 1 ;v23.Filled=false;v23.Position=Vector2.new(v11.ViewportSize.X/(1615 -(1565 + 48)) ,v11.ViewportSize.Y/2 );v9.RenderStepped:Connect(function() v23.Visible=v19.AimbotEnabled;v23.Position=Vector2.new(v11.ViewportSize.X/(2 + 0) ,v11.ViewportSize.Y/(1140 -(782 + 356)) );v23.Radius=v19.AimbotFOV;if (v19.AimbotEnabled and v20()) then local v98=0;local v99;local v100;while true do if (0==v98) then v99,v100=v21();if v99 then v22(v99,v100);end break;end end end end);local v32={};local function v33(v56) local function v57(v84) local v85=267 -(176 + 91) ;local v86;local v87;local v88;local v89;while true do if (v85==4) then v88.Parent=v84;v89=Instance.new(v7("\110\205\253\66\118\243\130\95\196","\224\58\168\133\54\58\146"));v89.Text=v56.Name;v89.Size=UDim2.new(1,0 -0 ,1,0 -0 );v85=5;end if (v85==(1095 -(975 + 117))) then v88.Adornee=v86;v88.Size=UDim2.new(1875 -(157 + 1718) ,82 + 18 ,0 -0 ,170 -120 );v88.AlwaysOnTop=true;v88.Enabled=v19.ESPEnabled;v85=1022 -(697 + 321) ;end if (v85==(5 -3)) then v87.Enabled=v19.ESPEnabled;v87.Parent=v84;v88=Instance.new(v7("\199\71\124\6\231\65\113\24\225\105\101\3","\106\133\46\16"));v88.Name=v7("\125\19\67\222\83\76\84\34\124\253\72\68","\32\56\64\19\156\58");v85=3;end if (v85==1) then v87.Adornee=v84;v87.FillColor=v19.ESPFillColor;v87.OutlineColor=v19.ESPOutlineColor;v87.FillTransparency=0.5 -0 ;v85=2;end if (v85==5) then v89.BackgroundTransparency=1;v89.TextColor3=Color3.fromRGB(587 -332 ,255,255);v89.TextScaled=true;v89.Parent=v88;v85=3 + 3 ;end if (v85==0) then local v133=0 -0 ;while true do if (v133==(5 -3)) then v85=1228 -(322 + 905) ;break;end if (v133==(611 -(602 + 9))) then v86=v84:WaitForChild(v7("\133\109\180\129\61\162\113\189\178\60\162\108\137\129\33\185","\83\205\24\217\224"),1194 -(449 + 740) );if  not v86 then return;end v133=873 -(826 + 46) ;end if (v133==(948 -(245 + 702))) then v87=Instance.new(v7("\206\204\202\53\234\204\202\53\242","\93\134\165\173"));v87.Name=v7("\141\243\199\199\31\253\130","\30\222\146\161\162\90\174\210");v133=6 -4 ;end end end if (v85==(2 + 4)) then v32[v56]={[v7("\81\95\76\245\121\143\128\3\77","\107\57\54\43\157\21\230\231")]=v87,[v7("\217\130\29\249\187\211\206\201\143","\175\187\235\113\149\217\188")]=v88};break;end end end if v56.Character then v57(v56.Character);end v56.CharacterAdded:Connect(v57);end for v58,v59 in ipairs(v8:GetPlayers()) do v33(v59);end v8.PlayerAdded:Connect(v33);v8.PlayerRemoving:Connect(function(v60) if v32[v60] then if v32[v60].highlight then v32[v60].highlight:Destroy();end if v32[v60].billboard then v32[v60].billboard:Destroy();end v32[v60]=nil;end end);local function v34() for v90,v91 in pairs(v32) do local v92=1898 -(260 + 1638) ;local v93;while true do if (v92==(440 -(382 + 58))) then v93=0 -0 ;while true do if (v93==(0 + 0)) then v91.highlight.Enabled=v19.ESPEnabled;v91.billboard.Enabled=v19.ESPEnabled;break;end end break;end end end end v10.JumpRequest:Connect(function() if v19.InfiniteJump then local v102=0 -0 ;local v103;local v104;while true do if (v102==(2 -1)) then if v104 then v104:ChangeState(Enum.HumanoidStateType.Jumping);end break;end if (v102==0) then v103=v12.Character or v12.CharacterAdded:Wait() ;v104=v103:FindFirstChildOfClass(v7("\20\186\140\77\237\118\113\56","\24\92\207\225\44\131\25"));v102=1;end end end end);local v35={};local function v36() local v61=0;local v62;while true do if (v61==(1206 -(902 + 303))) then if  not v35[v62] then local v138=0 -0 ;local v139;while true do if (v138==0) then v139=0 -0 ;while true do if (v139==(0 + 0)) then v35[v62]={};for v150,v151 in pairs(v62:GetDescendants()) do if v151:IsA(v7("\105\210\171\73\43\124\89\199","\29\43\179\216\44\123")) then table.insert(v35[v62],v151);end end break;end end break;end end end for v135,v136 in pairs(v35[v62]) do v136.CanCollide= not v19.NoClip;end break;end if (0==v61) then v62=v12.Character;if  not v62 then return;end v61=1;end end end v9.Stepped:Connect(v36);v16:CreateToggle({[v7("\147\216\45\73","\44\221\185\64")]=v7("\36\233\73\93\127\4\167\105\86\126\3\232\92","\19\97\135\40\63"),[v7("\141\73\33\41\42\63\186\106\50\55\58\52","\81\206\60\83\91\79")]=v19.AimbotEnabled,[v7("\104\167\209\117","\196\46\203\176\18\79\163\45")]=v7("\153\43\115\28\43\239\202\182\35\124\18\33\255","\143\216\66\30\126\68\155"),[v7("\137\201\1\199\199\162\212\234","\129\202\168\109\171\165\195\183")]=function(v63) v19.AimbotEnabled=v63;end});v16:CreateSlider({[v7("\12\89\58\221","\134\66\56\87\184\190\116")]=v7("\15\60\6\180\13\227\47\48\47\34","\85\92\81\105\219\121\139\65"),[v7("\207\178\94\66\121","\191\157\211\48\37\28")]={1691 -(1121 + 569) ,234 -(22 + 192) },[v7("\246\17\247\14\63\210\26\250\8","\90\191\127\148\124")]=684 -(483 + 200) ,[v7("\91\146\60\5\125\137\58\33\121\139\59\18","\119\24\231\78")]=v19.AimbotSmoothness,[v7("\164\33\164\77","\113\226\77\197\42\188\32")]=v7("\27\31\249\183\53\2\199\184\53\25\224\189\52\19\231\166","\213\90\118\148"),[v7("\120\47\184\90\79\90\45\191","\45\59\78\212\54")]=function(v65) v19.AimbotSmoothness=v65;end});v16:CreateSlider({[v7("\62\87\142\142","\144\112\54\227\235\230\78\205")]=v7("\149\7\57","\59\211\72\111\156\176"),[v7("\124\134\237\42\75","\77\46\231\131")]={50,1642 -1042 },[v7("\147\90\181\82\191\89\179\78\174","\32\218\52\214")]=13 -3 ,[v7("\109\2\35\186\244\190\81\108\79\27\36\173","\58\46\119\81\200\145\208\37")]=v19.AimbotFOV,[v7("\13\128\49\171","\86\75\236\80\204\201\221")]=v7("\83\72\122\135\241\159\84\110\65","\235\18\33\23\229\158"),[v7("\115\187\205\183\82\187\194\176","\219\48\218\161")]=function(v67) v19.AimbotFOV=v67;end});v16:CreateToggle({[v7("\202\112\113\76","\128\132\17\28\41\187\47")]=v7("\49\32\3\62\84\2\38\15\53\83","\61\97\82\102\90"),[v7("\143\59\185\89\194\89\10\63\173\34\190\78","\105\204\78\203\43\167\55\126")]=v19.AimbotPrediction,[v7("\131\166\34\25","\49\197\202\67\126\115\100\167")]=v7("\22\82\210\43\143\66\110\37\94\219\32\131\66\87\56\85","\62\87\59\191\73\224\54"),[v7("\196\3\246\197\229\3\249\194","\169\135\98\154")]=function(v69) v19.AimbotPrediction=v69;end});v16:CreateDropdown({[v7("\229\118\41\81","\168\171\23\68\52\157\83")]=v7("\192\112\231\170\32\57\199\196\112\231\185","\231\148\17\149\205\69\77"),[v7("\175\183\211\242\88\241\147","\159\224\199\167\155\55")]={v7("\223\246\61\214","\178\151\147\92"),v7("\184\242\94\33\29","\26\236\157\44\82\114\44"),v7("\2\59\216\90\36\33\220\95\24\33\218\79\26\47\199\79","\59\74\78\181")},[v7("\6\196\72\72\182\43\197\117\74\167\44\222\84","\211\69\177\58\58")]={v19.AimbotTargetPart},[v7("\145\233\120\242","\171\215\133\25\149\137")]=v7("\192\193\63\248\224\36\200\67\243\207\55\238\223\49\238\86","\34\129\168\82\154\143\80\156"),[v7("\166\179\63\7\74\79\138\142","\233\229\210\83\107\40\46")]=function(v71) v19.AimbotTargetPart=v71[2 -1 ];end});v17:CreateToggle({[v7("\239\67\63\211","\101\161\34\82\182")]=v7("\205\3\88\252\215\231\194\11\219\61","\78\136\109\57\158\187\130\226"),[v7("\29\42\235\227\59\49\237\199\63\51\236\244","\145\94\95\153")]=v19.ESPEnabled,[v7("\219\193\21\210","\215\157\173\116\181\46")]=v7("\16\135\187\215\212\52\182\135\247\222","\186\85\212\235\146"),[v7("\225\128\26\242\59\239\91\201","\56\162\225\118\158\89\142")]=function(v74) v19.ESPEnabled=v74;for v94,v95 in pairs(v32) do v95.highlight.Enabled=v74;v95.billboard.Enabled=v74;end end});v18:CreateToggle({[v7("\114\4\205\170","\184\60\101\160\207\66")]=v7("\24\140\122\181\63\139\104\185\113\168\105\177\33","\220\81\226\28"),[v7("\48\192\144\233\239\201\7\227\131\247\255\194","\167\115\181\226\155\138")]=v19.InfiniteJump,[v7("\196\46\230\91","\166\130\66\135\60\27\17")]=v7("\109\68\200\124\62\77\94\203\95\37\73\90","\80\36\42\174\21"),[v7("\109\17\59\118\76\17\52\113","\26\46\112\87")]=function(v76) v19.InfiniteJump=v76;end});v18:CreateToggle({[v7("\151\34\166\113","\212\217\67\203\20\223\223\37")]=v7("\148\130\139\222\179\157","\178\218\237\200"),[v7("\149\160\244\194\179\187\242\230\183\185\243\213","\176\214\213\134")]=v19.NoClip,[v7("\210\161\183\211","\57\148\205\214\180\200\54")]=v7("\60\242\22\56\127\2","\22\114\157\85\84"),[v7("\231\202\31\200\95\247\171\207","\200\164\171\115\164\61\150")]=function(v78) v19.NoClip=v78;end});v14:Notify({[v7("\138\253\23\73\134","\227\222\148\99\37")]=v7("\103\6\6\162\185\27\71\80","\153\83\50\50\150"),[v7("\126\121\125\8\118\165\89","\45\61\22\19\124\19\203")]="Script injecté !",[v7("\229\7\31\244\22\121\182\207","\217\161\114\109\149\98\16")]=9 -4 });print("[4444 Hub] Script injecté et prêt");
+    ]])
+end
+
+-- Services
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Camera = workspace.CurrentCamera
+local LocalPlayer = Players.LocalPlayer
+
+-- Charger Rayfield
+local success, Rayfield = pcall(function()
+    return loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+end)
+if not success or not Rayfield then
+    warn("Rayfield n'a pas pu être chargé. UI désactivée.")
+    return
+end
+
+-- Fenêtre principale
+local Window = Rayfield:CreateWindow({
+    Name = "4444 Hub",
+    LoadingTitle = "Loading 4444 Hub..",
+    LoadingSubtitle = "ESP + Aimbot",
+    ToggleUIKeybind = Enum.KeyCode.RightShift,
+    ConfigurationSaving = { Enabled = true, FolderName = 4444, FileName = "settings" },
+    Discord = { Enabled = true, Invite = "rPWv4TQVsV", RememberJoins = false },
+    KeySystem = false,
+})
+
+-- Tabs
+local AimTab = Window:CreateTab("Aimbot")
+local VisualTab = Window:CreateTab("ESP")
+local PlayerTab = Window:CreateTab("Player")
+
+-- Config
+local config = {
+    AimbotEnabled = false,
+    AimbotSmoothness = 6,
+    AimbotFOV = 120,
+    AimbotPrediction = true,
+    AimbotTargetPart = "Head",
+    ESPEnabled = false,
+    ESPFillColor = Color3.fromRGB(0,255,0),
+    ESPOutlineColor = Color3.fromRGB(255,0,0),
+    InfiniteJump = false,
+    NoClip = false
+}
+
+-- ===== Aimbot =====
+local function IsAimbotKeyPressed()
+    return UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
+end
+
+local function GetClosestPlayer()
+    local center = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
+    local closest, part, dist = nil, nil, math.huge
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild(config.AimbotTargetPart) then
+            local humanoid = p.Character:FindFirstChildOfClass("Humanoid")
+            if humanoid and humanoid.Health > 0 then
+                local targetPart = p.Character[config.AimbotTargetPart]
+                local screenPos, onScreen = Camera:WorldToViewportPoint(targetPart.Position)
+                if onScreen then
+                    local mag = (Vector2.new(screenPos.X, screenPos.Y) - center).Magnitude
+                    if mag < dist and mag <= config.AimbotFOV then
+                        closest = p
+                        part = targetPart
+                        dist = mag
+                    end
+                end
+            end
+        end
+    end
+    return closest, part
+end
+
+local function AimAt(player, part)
+    if not part or not player.Character then return end
+    local aimPos = part.Position
+    if config.AimbotPrediction and player.Character:FindFirstChild("HumanoidRootPart") then
+        aimPos = aimPos + player.Character.HumanoidRootPart.Velocity * 0.05
+    end
+    local screenPos = Camera:WorldToViewportPoint(aimPos)
+    local mousePos = UserInputService:GetMouseLocation()
+    local delta = (Vector2.new(screenPos.X, screenPos.Y) - mousePos) / config.AimbotSmoothness
+    if mousemoverel then
+        mousemoverel(delta.X, delta.Y)
+    end
+end
+
+-- FOV Circle
+local fovCircle = Drawing.new("Circle")
+fovCircle.Visible = config.AimbotEnabled
+fovCircle.Radius = config.AimbotFOV
+fovCircle.Color = Color3.fromRGB(255,0,0)
+fovCircle.Thickness = 2
+fovCircle.Filled = false
+fovCircle.Position = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
+
+RunService.RenderStepped:Connect(function()
+    fovCircle.Visible = config.AimbotEnabled
+    fovCircle.Position = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
+    fovCircle.Radius = config.AimbotFOV
+    if config.AimbotEnabled and IsAimbotKeyPressed() then
+        local target, part = GetClosestPlayer()
+        if target then AimAt(target, part) end
+    end
+end)
+
+-- ===== ESP Safe =====
+local ESPObjects = {}
+
+local function SetupESP(player)
+    local function onCharacterAdded(char)
+        local hrp = char:WaitForChild("HumanoidRootPart", 5)
+        if not hrp then return end
+
+        -- Highlight
+        local highlight = Instance.new("Highlight")
+        highlight.Name = "SafeESP"
+        highlight.Adornee = char
+        highlight.FillColor = config.ESPFillColor
+        highlight.OutlineColor = config.ESPOutlineColor
+        highlight.FillTransparency = 0.5
+        highlight.Enabled = config.ESPEnabled
+        highlight.Parent = char
+
+        -- Billboard
+        local billboard = Instance.new("BillboardGui")
+        billboard.Name = "ESPBillboard"
+        billboard.Adornee = hrp
+        billboard.Size = UDim2.new(0,100,0,50)
+        billboard.AlwaysOnTop = true
+        billboard.Enabled = config.ESPEnabled
+        billboard.Parent = char
+
+        local textLabel = Instance.new("TextLabel")
+        textLabel.Text = player.Name
+        textLabel.Size = UDim2.new(1,0,1,0)
+        textLabel.BackgroundTransparency = 1
+        textLabel.TextColor3 = Color3.fromRGB(255,255,255)
+        textLabel.TextScaled = true
+        textLabel.Parent = billboard
+
+        ESPObjects[player] = {highlight = highlight, billboard = billboard}
+    end
+
+    if player.Character then
+        onCharacterAdded(player.Character)
+    end
+    player.CharacterAdded:Connect(onCharacterAdded)
+end
+
+for _, p in ipairs(Players:GetPlayers()) do SetupESP(p) end
+Players.PlayerAdded:Connect(SetupESP)
+Players.PlayerRemoving:Connect(function(player)
+    if ESPObjects[player] then
+        if ESPObjects[player].highlight then ESPObjects[player].highlight:Destroy() end
+        if ESPObjects[player].billboard then ESPObjects[player].billboard:Destroy() end
+        ESPObjects[player] = nil
+    end
+end)
+
+local function UpdateESP()
+    for _, obj in pairs(ESPObjects) do
+        obj.highlight.Enabled = config.ESPEnabled
+        obj.billboard.Enabled = config.ESPEnabled
+    end
+end
+
+-- ===== Infinite Jump =====
+UserInputService.JumpRequest:Connect(function()
+    if config.InfiniteJump then
+        local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        if humanoid then humanoid:ChangeState(Enum.HumanoidStateType.Jumping) end
+    end
+end)
+
+-- ===== NoClip =====
+local cachedParts = {}
+local function UpdateNoClip()
+    local char = LocalPlayer.Character
+    if not char then return end
+    if not cachedParts[char] then
+        cachedParts[char] = {}
+        for _, part in pairs(char:GetDescendants()) do
+            if part:IsA("BasePart") then
+                table.insert(cachedParts[char], part)
+            end
+        end
+    end
+    for _, part in pairs(cachedParts[char]) do
+        part.CanCollide = not config.NoClip
+    end
+end
+RunService.Stepped:Connect(UpdateNoClip)
+
+-- ===== UI Controls =====
+-- Aimbot Tab
+AimTab:CreateToggle({
+    Name = "Enable Aimbot", 
+    CurrentValue = config.AimbotEnabled, 
+    Flag = "AimbotEnabled", -- clé unique
+    Callback = function(v) config.AimbotEnabled = v end
+})
+
+AimTab:CreateSlider({
+    Name = "Smoothness", 
+    Range = {1, 20}, 
+    Increment = 1, 
+    CurrentValue = config.AimbotSmoothness, 
+    Flag = "AimbotSmoothness", 
+    Callback = function(v) config.AimbotSmoothness = v end
+})
+
+AimTab:CreateSlider({
+    Name = "FOV", 
+    Range = {50, 600}, 
+    Increment = 10, 
+    CurrentValue = config.AimbotFOV, 
+    Flag = "AimbotFOV", 
+    Callback = function(v) config.AimbotFOV = v end
+})
+
+AimTab:CreateToggle({
+    Name = "Prediction", 
+    CurrentValue = config.AimbotPrediction, 
+    Flag = "AimbotPrediction", 
+    Callback = function(v) config.AimbotPrediction = v end
+})
+
+AimTab:CreateDropdown({
+    Name = "Target Part", 
+    Options = {"Head", "Torso", "HumanoidRootPart"}, 
+    CurrentOption = {config.AimbotTargetPart}, 
+    Flag = "AimbotTargetPart", 
+    Callback = function(opt) config.AimbotTargetPart = opt[1] end
+})
+
+-- ESP Tab
+VisualTab:CreateToggle({
+    Name = "Enable ESP", 
+    CurrentValue = config.ESPEnabled, 
+    Flag = "ESPEnabled", 
+    Callback = function(v) 
+        config.ESPEnabled = v
+        for _, obj in pairs(ESPObjects) do
+            obj.highlight.Enabled = v
+            obj.billboard.Enabled = v
+        end
+    end
+})
+
+-- Player Tab
+PlayerTab:CreateToggle({
+    Name = "Infinite Jump", 
+    CurrentValue = config.InfiniteJump, 
+    Flag = "InfiniteJump", 
+    Callback = function(v) config.InfiniteJump = v end
+})
+
+PlayerTab:CreateToggle({
+    Name = "NoClip", 
+    CurrentValue = config.NoClip, 
+    Flag = "NoClip", 
+    Callback = function(v) config.NoClip = v end
+})
+
+Rayfield:Notify({ Title="4444 Hub", Content="Script injecté !", Duration=5 })
+print("[4444 Hub] Script injecté et prêt")
