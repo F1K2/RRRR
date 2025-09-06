@@ -59,13 +59,13 @@ local config = {
     NoClip = false
 }
 
--- ===== Aimbot (clic droit) =====
+-- ===== Aimbot =====
 local function IsAimbotKeyPressed()
     return UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
 end
 
 local function GetClosestPlayer()
-    local center = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+    local center = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
     local closest, part, dist = nil, nil, math.huge
     for _, p in ipairs(Players:GetPlayers()) do
         if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild(config.AimbotTargetPart) then
@@ -120,31 +120,32 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
--- ===== ESP Safe (Highlight + BillboardGui) =====
+-- ===== ESP Safe =====
 local ESPObjects = {}
 
-local function CreateESP(player)
-    if player == LocalPlayer or ESPObjects[player] then return end
-    if not player.Character then return end
+local function SetupESP(player)
+    local function onCharacterAdded(char)
+        local hrp = char:WaitForChild("HumanoidRootPart", 5)
+        if not hrp then return end
 
-    local highlight = Instance.new("Highlight")
-    highlight.Name = "SafeESP"
-    highlight.Adornee = player.Character
-    highlight.FillColor = config.ESPFillColor
-    highlight.OutlineColor = config.ESPOutlineColor
-    highlight.FillTransparency = 0.5
-    highlight.Enabled = config.ESPEnabled
-    highlight.Parent = player.Character
+        -- Highlight
+        local highlight = Instance.new("Highlight")
+        highlight.Name = "SafeESP"
+        highlight.Adornee = char
+        highlight.FillColor = config.ESPFillColor
+        highlight.OutlineColor = config.ESPOutlineColor
+        highlight.FillTransparency = 0.5
+        highlight.Enabled = config.ESPEnabled
+        highlight.Parent = char
 
-    local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-    if hrp then
+        -- Billboard
         local billboard = Instance.new("BillboardGui")
         billboard.Name = "ESPBillboard"
         billboard.Adornee = hrp
         billboard.Size = UDim2.new(0,100,0,50)
         billboard.AlwaysOnTop = true
         billboard.Enabled = config.ESPEnabled
-        billboard.Parent = player.Character
+        billboard.Parent = char
 
         local textLabel = Instance.new("TextLabel")
         textLabel.Text = player.Name
@@ -156,21 +157,23 @@ local function CreateESP(player)
 
         ESPObjects[player] = {highlight = highlight, billboard = billboard}
     end
+
+    if player.Character then
+        onCharacterAdded(player.Character)
+    end
+    player.CharacterAdded:Connect(onCharacterAdded)
 end
 
-local function RemoveESP(player)
+for _, p in ipairs(Players:GetPlayers()) do SetupESP(p) end
+Players.PlayerAdded:Connect(SetupESP)
+Players.PlayerRemoving:Connect(function(player)
     if ESPObjects[player] then
         if ESPObjects[player].highlight then ESPObjects[player].highlight:Destroy() end
         if ESPObjects[player].billboard then ESPObjects[player].billboard:Destroy() end
         ESPObjects[player] = nil
     end
-end
+end)
 
-for _, p in ipairs(Players:GetPlayers()) do CreateESP(p) end
-Players.PlayerAdded:Connect(CreateESP)
-Players.PlayerRemoving:Connect(RemoveESP)
-
--- Update rapide
 local function UpdateESP()
     for _, obj in pairs(ESPObjects) do
         obj.highlight.Enabled = config.ESPEnabled
