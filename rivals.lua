@@ -210,16 +210,75 @@ end
 RunService.Stepped:Connect(UpdateNoClip)
 
 -- ===== UI Controls =====
-AimTab:CreateToggle({ Name = "Enable Aimbot", CurrentValue = config.AimbotEnabled, Callback = function(v) config.AimbotEnabled = v end })
-AimTab:CreateSlider({ Name = "Smoothness", Range = {1,20}, Increment=1, CurrentValue=config.AimbotSmoothness, Callback=function(v) config.AimbotSmoothness=v end })
-AimTab:CreateSlider({ Name = "FOV", Range = {50,600}, Increment=10, CurrentValue=config.AimbotFOV, Callback=function(v) config.AimbotFOV=v end })
-AimTab:CreateToggle({ Name = "Prediction", CurrentValue=config.AimbotPrediction, Callback=function(v) config.AimbotPrediction=v end })
-AimTab:CreateDropdown({ Name = "Target Part", Options={"Head","Torso","HumanoidRootPart"}, CurrentOption={config.AimbotTargetPart}, Callback=function(opt) config.AimbotTargetPart=opt[1] end })
+-- Aimbot Tab
+AimTab:CreateToggle({
+    Name = "Enable Aimbot", 
+    CurrentValue = config.AimbotEnabled, 
+    Flag = "AimbotEnabled", -- clé unique
+    Callback = function(v) config.AimbotEnabled = v end
+})
 
-VisualTab:CreateToggle({ Name = "Enable ESP", CurrentValue=config.ESPEnabled, Callback=function(v) config.ESPEnabled=v UpdateESP() end })
+AimTab:CreateSlider({
+    Name = "Smoothness", 
+    Range = {1, 20}, 
+    Increment = 1, 
+    CurrentValue = config.AimbotSmoothness, 
+    Flag = "AimbotSmoothness", 
+    Callback = function(v) config.AimbotSmoothness = v end
+})
 
-PlayerTab:CreateToggle({ Name = "Infinite Jump", CurrentValue=config.InfiniteJump, Callback=function(v) config.InfiniteJump=v end })
-PlayerTab:CreateToggle({ Name = "NoClip", CurrentValue=config.NoClip, Callback=function(v) config.NoClip=v end })
+AimTab:CreateSlider({
+    Name = "FOV", 
+    Range = {50, 600}, 
+    Increment = 10, 
+    CurrentValue = config.AimbotFOV, 
+    Flag = "AimbotFOV", 
+    Callback = function(v) config.AimbotFOV = v end
+})
+
+AimTab:CreateToggle({
+    Name = "Prediction", 
+    CurrentValue = config.AimbotPrediction, 
+    Flag = "AimbotPrediction", 
+    Callback = function(v) config.AimbotPrediction = v end
+})
+
+AimTab:CreateDropdown({
+    Name = "Target Part", 
+    Options = {"Head", "Torso", "HumanoidRootPart"}, 
+    CurrentOption = {config.AimbotTargetPart}, 
+    Flag = "AimbotTargetPart", 
+    Callback = function(opt) config.AimbotTargetPart = opt[1] end
+})
+
+-- ESP Tab
+VisualTab:CreateToggle({
+    Name = "Enable ESP", 
+    CurrentValue = config.ESPEnabled, 
+    Flag = "ESPEnabled", 
+    Callback = function(v) 
+        config.ESPEnabled = v
+        for _, obj in pairs(ESPObjects) do
+            obj.highlight.Enabled = v
+            obj.billboard.Enabled = v
+        end
+    end
+})
+
+-- Player Tab
+PlayerTab:CreateToggle({
+    Name = "Infinite Jump", 
+    CurrentValue = config.InfiniteJump, 
+    Flag = "InfiniteJump", 
+    Callback = function(v) config.InfiniteJump = v end
+})
+
+PlayerTab:CreateToggle({
+    Name = "NoClip", 
+    CurrentValue = config.NoClip, 
+    Flag = "NoClip", 
+    Callback = function(v) config.NoClip = v end
+})
 
 Rayfield:Notify({ Title="4444 Hub", Content="Script injecté et ESP stable !", Duration=5 })
 print("[4444 Hub] Script injecté et prêt")
