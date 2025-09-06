@@ -35,7 +35,7 @@ local Window = Rayfield:CreateWindow({
     LoadingTitle = "Loading 4444 Hub..",
     LoadingSubtitle = "ESP Safe + Aimbot",
     ToggleUIKeybind = Enum.KeyCode.RightShift,
-    ConfigurationSaving = { Enabled = true, FolderName = nil, FileName = "4444 Hub" },
+    ConfigurationSaving = { Enabled = true, FolderName = 4444, FileName = "settings" },
     Discord = { Enabled = true, Invite = "3R2xsfgDee", RememberJoins = false },
     KeySystem = false,
 })
