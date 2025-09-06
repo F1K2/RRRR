@@ -5,11 +5,11 @@
 -- Auto reload après téléport (Rivals)
 if syn and syn.queue_on_teleport then
     syn.queue_on_teleport([[
-        loadstring(game:HttpGet("https://tonlien.com/0212hub.lua"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/F1K2/RRRR/refs/heads/main/rivals.lua"))()
     ]])
 elseif queue_on_teleport then
     queue_on_teleport([[
-        loadstring(game:HttpGet("https://tonlien.com/0212hub.lua"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/F1K2/RRRR/refs/heads/main/rivals.lua"))()
     ]])
 end
 
