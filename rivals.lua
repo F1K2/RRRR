@@ -187,7 +187,6 @@ AimTab:CreateSlider({ Name = "Smoothness", Range = {1, 20}, Increment = 1, Curre
 AimTab:CreateSlider({ Name = "FOV", Range = {50, 600}, Increment = 10, CurrentValue = config.AimbotFOV, Callback = function(v) config.AimbotFOV = v end })
 AimTab:CreateToggle({ Name = "Prediction", CurrentValue = config.AimbotPrediction, Callback = function(v) config.AimbotPrediction = v end })
 AimTab:CreateDropdown({ Name = "Target Part", Options = {"Head","Torso","HumanoidRootPart"}, CurrentOption={config.AimbotTargetPart}, Callback=function(opt) config.AimbotTargetPart=opt[1] end })
-AimTab:CreateLabel({ Title = "Activation : Clic droit (MouseButton2)" })
 
 VisualTab:CreateToggle({ Name = "Enable ESP", CurrentValue = config.ESPEnabled, Callback = function(v) config.ESPEnabled = v end })
 
