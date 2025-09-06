@@ -1,5 +1,5 @@
 -- ===========================================
--- 4444 Hub (ESP Safe + Aimbot + Auto-Teleport Reload)
+-- 4444 Hub Optimisé (ESP Safe + Aimbot + Auto-Teleport Reload)
 -- ===========================================
 
 -- 🔹 Auto reload après téléport (Rivals)
@@ -53,6 +53,8 @@ local config = {
     AimbotPrediction = true,
     AimbotTargetPart = "Head",
     ESPEnabled = false,
+    ESPFillColor = Color3.fromRGB(0,255,0),
+    ESPOutlineColor = Color3.fromRGB(255,0,0),
     InfiniteJump = false,
     NoClip = false
 }
@@ -67,14 +69,17 @@ local function GetClosestPlayer()
     local closest, part, dist = nil, nil, math.huge
     for _, p in ipairs(Players:GetPlayers()) do
         if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild(config.AimbotTargetPart) then
-            local targetPart = p.Character[config.AimbotTargetPart]
-            local screenPos, onScreen = Camera:WorldToViewportPoint(targetPart.Position)
-            if onScreen then
-                local mag = (Vector2.new(screenPos.X, screenPos.Y) - center).Magnitude
-                if mag < dist and mag <= config.AimbotFOV then
-                    closest = p
-                    part = targetPart
-                    dist = mag
+            local humanoid = p.Character:FindFirstChildOfClass("Humanoid")
+            if humanoid and humanoid.Health > 0 then
+                local targetPart = p.Character[config.AimbotTargetPart]
+                local screenPos, onScreen = Camera:WorldToViewportPoint(targetPart.Position)
+                if onScreen then
+                    local mag = (Vector2.new(screenPos.X, screenPos.Y) - center).Magnitude
+                    if mag < dist and mag <= config.AimbotFOV then
+                        closest = p
+                        part = targetPart
+                        dist = mag
+                    end
                 end
             end
         end
@@ -96,7 +101,19 @@ local function AimAt(player, part)
     end
 end
 
+-- FOV Circle
+local fovCircle = Drawing.new("Circle")
+fovCircle.Visible = config.AimbotEnabled
+fovCircle.Radius = config.AimbotFOV
+fovCircle.Color = Color3.fromRGB(255,0,0)
+fovCircle.Thickness = 2
+fovCircle.Filled = false
+fovCircle.Position = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
+
 RunService.RenderStepped:Connect(function()
+    fovCircle.Visible = config.AimbotEnabled
+    fovCircle.Position = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
+    fovCircle.Radius = config.AimbotFOV
     if config.AimbotEnabled and IsAimbotKeyPressed() then
         local target, part = GetClosestPlayer()
         if target then AimAt(target, part) end
@@ -107,23 +124,24 @@ end)
 local ESPObjects = {}
 
 local function CreateESP(player)
-    if player == LocalPlayer then return end
-    if ESPObjects[player] then return end
+    if player == LocalPlayer or ESPObjects[player] then return end
+    if not player.Character then return end
 
-    if player.Character then
-        local highlight = Instance.new("Highlight")
-        highlight.Name = "SafeESP"
-        highlight.Adornee = player.Character
-        highlight.FillColor = Color3.fromRGB(0,255,0)
-        highlight.OutlineColor = Color3.fromRGB(255,0,0)
-        highlight.FillTransparency = 0.5
-        highlight.Enabled = config.ESPEnabled
-        highlight.Parent = player.Character
+    local highlight = Instance.new("Highlight")
+    highlight.Name = "SafeESP"
+    highlight.Adornee = player.Character
+    highlight.FillColor = config.ESPFillColor
+    highlight.OutlineColor = config.ESPOutlineColor
+    highlight.FillTransparency = 0.5
+    highlight.Enabled = config.ESPEnabled
+    highlight.Parent = player.Character
 
+    local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+    if hrp then
         local billboard = Instance.new("BillboardGui")
         billboard.Name = "ESPBillboard"
-        billboard.Adornee = player.Character:FindFirstChild("HumanoidRootPart")
-        billboard.Size = UDim2.new(0, 100, 0, 50)
+        billboard.Adornee = hrp
+        billboard.Size = UDim2.new(0,100,0,50)
         billboard.AlwaysOnTop = true
         billboard.Enabled = config.ESPEnabled
         billboard.Parent = player.Character
@@ -148,20 +166,17 @@ local function RemoveESP(player)
     end
 end
 
-for _, p in ipairs(Players:GetPlayers()) do
-    CreateESP(p)
-end
+for _, p in ipairs(Players:GetPlayers()) do CreateESP(p) end
 Players.PlayerAdded:Connect(CreateESP)
 Players.PlayerRemoving:Connect(RemoveESP)
 
-RunService.RenderStepped:Connect(function()
-    for player, obj in pairs(ESPObjects) do
-        if player.Character then
-            obj.highlight.Enabled = config.ESPEnabled
-            obj.billboard.Enabled = config.ESPEnabled
-        end
+-- Update rapide
+local function UpdateESP()
+    for _, obj in pairs(ESPObjects) do
+        obj.highlight.Enabled = config.ESPEnabled
+        obj.billboard.Enabled = config.ESPEnabled
     end
-end)
+end
 
 -- ===== Infinite Jump =====
 UserInputService.JumpRequest:Connect(function()
@@ -173,25 +188,35 @@ UserInputService.JumpRequest:Connect(function()
 end)
 
 -- ===== NoClip =====
-RunService.Stepped:Connect(function()
-    if config.NoClip and LocalPlayer.Character then
-        for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
-            if part:IsA("BasePart") then part.CanCollide = false end
+local cachedParts = {}
+local function UpdateNoClip()
+    local char = LocalPlayer.Character
+    if not char then return end
+    if not cachedParts[char] then
+        cachedParts[char] = {}
+        for _, part in pairs(char:GetDescendants()) do
+            if part:IsA("BasePart") then
+                table.insert(cachedParts[char], part)
+            end
         end
     end
-end)
+    for _, part in pairs(cachedParts[char]) do
+        part.CanCollide = not config.NoClip
+    end
+end
+RunService.Stepped:Connect(UpdateNoClip)
 
 -- ===== UI Controls =====
 AimTab:CreateToggle({ Name = "Enable Aimbot", CurrentValue = config.AimbotEnabled, Callback = function(v) config.AimbotEnabled = v end })
-AimTab:CreateSlider({ Name = "Smoothness", Range = {1, 20}, Increment = 1, CurrentValue = config.AimbotSmoothness, Callback = function(v) config.AimbotSmoothness = v end })
-AimTab:CreateSlider({ Name = "FOV", Range = {50, 600}, Increment = 10, CurrentValue = config.AimbotFOV, Callback = function(v) config.AimbotFOV = v end })
-AimTab:CreateToggle({ Name = "Prediction", CurrentValue = config.AimbotPrediction, Callback = function(v) config.AimbotPrediction = v end })
-AimTab:CreateDropdown({ Name = "Target Part", Options = {"Head","Torso","HumanoidRootPart"}, CurrentOption={config.AimbotTargetPart}, Callback=function(opt) config.AimbotTargetPart=opt[1] end })
+AimTab:CreateSlider({ Name = "Smoothness", Range = {1,20}, Increment=1, CurrentValue=config.AimbotSmoothness, Callback=function(v) config.AimbotSmoothness=v end })
+AimTab:CreateSlider({ Name = "FOV", Range = {50,600}, Increment=10, CurrentValue=config.AimbotFOV, Callback=function(v) config.AimbotFOV=v end })
+AimTab:CreateToggle({ Name = "Prediction", CurrentValue=config.AimbotPrediction, Callback=function(v) config.AimbotPrediction=v end })
+AimTab:CreateDropdown({ Name = "Target Part", Options={"Head","Torso","HumanoidRootPart"}, CurrentOption={config.AimbotTargetPart}, Callback=function(opt) config.AimbotTargetPart=opt[1] end })
 
-VisualTab:CreateToggle({ Name = "Enable ESP", CurrentValue = config.ESPEnabled, Callback = function(v) config.ESPEnabled = v end })
+VisualTab:CreateToggle({ Name = "Enable ESP", CurrentValue=config.ESPEnabled, Callback=function(v) config.ESPEnabled=v UpdateESP() end })
 
-PlayerTab:CreateToggle({ Name = "Infinite Jump", CurrentValue = config.InfiniteJump, Callback = function(v) config.InfiniteJump=v end })
-PlayerTab:CreateToggle({ Name = "NoClip", CurrentValue = config.NoClip, Callback = function(v) config.NoClip=v end })
+PlayerTab:CreateToggle({ Name = "Infinite Jump", CurrentValue=config.InfiniteJump, Callback=function(v) config.InfiniteJump=v end })
+PlayerTab:CreateToggle({ Name = "NoClip", CurrentValue=config.NoClip, Callback=function(v) config.NoClip=v end })
 
 Rayfield:Notify({ Title="4444 Hub", Content="Script injecté et ESP stable !", Duration=5 })
 print("[4444 Hub] Script injecté et prêt")
