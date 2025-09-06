@@ -1,5 +1,5 @@
 -- ===========================================
--- 0212 Hub Full Version (Aimbot + Silent Aim + ESP + Auto Reload + Player)
+-- 0212 Hub Full Version (Safe Aimbot + Silent Aim + ESP + Player)
 -- ===========================================
 
 -- Auto reload après téléport (Rivals)
@@ -93,7 +93,7 @@ end
 local function AimAt(player, part)
     if not part then return end
     local aimPos = part.Position
-    if config.AimbotPrediction and player.Character:FindFirstChild("HumanoidRootPart") then
+    if config.AimbotPrediction and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
         local vel = player.Character.HumanoidRootPart.Velocity
         aimPos = aimPos + vel * 0.05
     end
@@ -116,7 +116,7 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
--- ===== Silent Aim =====
+-- ===== Silent Aim (safe hook) =====
 local targetSilent = nil
 RunService.Heartbeat:Connect(function()
     if config.SilentAimEnabled then
@@ -127,16 +127,21 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
-local oldNamecall
-oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+local mt = getrawmetatable(game)
+local oldNamecall = mt.__namecall
+setreadonly(mt, false)
+mt.__namecall = newcclosure(function(self, ...)
     local method = getnamecallmethod()
     local args = {...}
     if config.SilentAimEnabled and method == "FireServer" and tostring(self) == "Hit" and targetSilent then
-        args[2] = targetSilent.Position
+        if args[2] then
+            args[2] = targetSilent.Position
+        end
         return oldNamecall(self, unpack(args))
     end
     return oldNamecall(self, ...)
 end)
+setreadonly(mt, true)
 
 -- === UI Controls ===
 AimTab:CreateToggle({ Name = "Enable Aimbot", CurrentValue = config.AimbotEnabled, Callback = function(v) config.AimbotEnabled = v end })
@@ -153,10 +158,10 @@ local ESPObjects = {}
 
 local function ClearESP()
     for _, v in pairs(ESPObjects) do
-        v.Box:Remove()
-        v.Tracer:Remove()
-        v.Health:Remove()
-        v.Name:Remove()
+        if v.Box then v.Box:Remove() end
+        if v.Tracer then v.Tracer:Remove() end
+        if v.Health then v.Health:Remove() end
+        if v.Name then v.Name:Remove() end
     end
     ESPObjects = {}
 end
@@ -182,15 +187,25 @@ local function CreateESP(player)
     ESPObjects[player] = { Box = box, Tracer = tracer, Health = health, Name = name }
 end
 
+Players.PlayerAdded:Connect(CreateESP)
+Players.PlayerRemoving:Connect(function(player)
+    if ESPObjects[player] then
+        if ESPObjects[player].Box then ESPObjects[player].Box:Remove() end
+        if ESPObjects[player].Tracer then ESPObjects[player].Tracer:Remove() end
+        if ESPObjects[player].Health then ESPObjects[player].Health:Remove() end
+        if ESPObjects[player].Name then ESPObjects[player].Name:Remove() end
+        ESPObjects[player] = nil
+    end
+end)
+
 RunService.RenderStepped:Connect(function()
     if config.ESPEnabled then
         for _, player in pairs(Players:GetPlayers()) do
-            if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                if not ESPObjects[player] then
-                    CreateESP(player)
-                end
+            if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChild("Humanoid") then
+                if not ESPObjects[player] then CreateESP(player) end
                 local obj = ESPObjects[player]
                 local hrp = player.Character.HumanoidRootPart
+                local hum = player.Character.Humanoid
                 local pos, vis = Camera:WorldToViewportPoint(hrp.Position)
                 if vis then
                     local size = (Camera:WorldToViewportPoint(hrp.Position + Vector3.new(2, 3, 0)).X - Camera:WorldToViewportPoint(hrp.Position - Vector3.new(2, -3, 0)).X)
@@ -208,7 +223,7 @@ RunService.RenderStepped:Connect(function()
 
                     obj.Health.Visible = config.ESPHealth
                     obj.Health.From = Vector2.new(pos.X - size/2 - 5, pos.Y + size*0.75)
-                    obj.Health.To = Vector2.new(pos.X - size/2 - 5, pos.Y + size*0.75 - (player.Character.Humanoid.Health / player.Character.Humanoid.MaxHealth) * size*1.5)
+                    obj.Health.To = Vector2.new(pos.X - size/2 - 5, pos.Y + size*0.75 - (hum.Health / hum.MaxHealth) * size*1.5)
                 else
                     obj.Box.Visible = false
                     obj.Tracer.Visible = false
@@ -231,7 +246,7 @@ VisualTab:CreateToggle({ Name = "Names", CurrentValue = config.ESPNames, Callbac
 -- === Player Tab ===
 PlayerTab:CreateToggle({ Name = "Infinite Jump", CurrentValue = false, Callback = function(v) config.InfiniteJump = v end })
 UserInputService.JumpRequest:Connect(function()
-    if config.InfiniteJump then
+    if config.InfiniteJump and LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
         LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
     end
 end)
@@ -246,3 +261,5 @@ RunService.Stepped:Connect(function()
         end
     end
 end)
+
+Rayfield:Notify({ Title = "0212 Hub", Content = "Script chargé et stable !", Duration = 5 })
