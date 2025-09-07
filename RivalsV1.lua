@@ -307,5 +307,3 @@ MiscTab:CreateToggle({ Name = "Infinite Jump", CurrentValue = config.InfiniteJum
 
 Rayfield:Notify({ Title="4444 Hub", Content="Script injecté !", Duration=5 })
 print("[4444 Hub] Script injecté et prêt")
-
-
