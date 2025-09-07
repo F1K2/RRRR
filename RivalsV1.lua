@@ -1,5 +1,5 @@
 -- ===========================================
--- 4444 Hub (Aimbot + ESP + Advanced Features)
+-- 4444 Hub (Complete Safe Version)
 -- ===========================================
 
 -- 🔹 Auto reload après téléport
@@ -12,6 +12,11 @@ elseif queue_on_teleport then
         loadstring(game:HttpGet("https://raw.githubusercontent.com/F1K2/RRRR/refs/heads/main/RivalsV1.lua"))()
     ]])
 end
+
+-- 🔹 Exploit safe
+local mousemoverel = mousemoverel or function() end
+local hookmetamethod = hookmetamethod or hookfunction or function(_, f) return f end
+local getnamecallmethod = getnamecallmethod or function() return "" end
 
 -- Services
 local Players = game:GetService("Players")
@@ -30,24 +35,26 @@ local function GetHRP(player)
     return char:FindFirstChild("HumanoidRootPart")
 end
 
--- 🔹 Charger Rayfield
+-- Charger Rayfield UI
 local success, Rayfield = pcall(function()
     return loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 end)
+
 if not success or not Rayfield then
-    warn("Rayfield n'a pas pu être chargé. UI désactivée.")
-    return
+    warn("[4444 Hub] Rayfield n'a pas pu être chargé. UI désactivée.")
+    Rayfield = {
+        CreateWindow = function() return {CreateTab=function() return {} end} end,
+        Notify = function() end
+    }
 end
 
--- 🔹 Fenêtre principale
+-- Fenêtre principale
 local Window = Rayfield:CreateWindow({
     Name = "4444 Hub",
     LoadingTitle = "Loading 4444 Hub..",
     LoadingSubtitle = "ESP + Aimbot",
-    ToggleUIKeybind = Enum.KeyCode.RightShift, -- toggle UI
+    ToggleUIKeybind = Enum.KeyCode.RightShift,
     ConfigurationSaving = { Enabled = true, FolderName = "4444Hub", FileName = "settings" },
-    Discord = { Enabled = true, Invite = "rPWv4TQVsV", RememberJoins = false },
-    KeySystem = false,
 })
 
 -- Tabs
@@ -76,7 +83,7 @@ local config = {
     ESPColor = Color3.fromRGB(255,255,255)
 }
 
--- ===== Aimbot & Silent Aim =====
+-- ===== Aimbot =====
 local function IsAimbotKeyPressed()
     return UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
 end
@@ -113,12 +120,10 @@ local function AimAt(player, part)
     local screenPos = Camera:WorldToViewportPoint(aimPos)
     local mousePos = UserInputService:GetMouseLocation()
     local delta = (Vector2.new(screenPos.X, screenPos.Y) - mousePos) / config.AimbotSmoothness
-    if mousemoverel then
-        mousemoverel(delta.X, delta.Y)
-    end
+    mousemoverel(delta.X, delta.Y)
 end
 
--- 🔹 Silent Aim Hook
+-- ===== Silent Aim Hook =====
 local oldNamecall
 oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
     local method = getnamecallmethod()
@@ -131,7 +136,7 @@ oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
     return oldNamecall(self, ...)
 end)
 
--- FOV Circle
+-- ===== FOV Circle =====
 local fovCircle = Drawing.new("Circle")
 fovCircle.Thickness = 2
 fovCircle.Filled = false
@@ -148,12 +153,10 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
--- ===========================================
--- ESP Drawing
--- ===========================================
+-- ===== ESP =====
 local ESPObjects = {}
 
-function CreateESP(player)
+local function CreateESP(player)
     if player == LocalPlayer then return end
     if ESPObjects[player] then return end
 
@@ -181,7 +184,7 @@ function CreateESP(player)
     esp.Text.Visible = false
 end
 
-function RemoveESP(player)
+local function RemoveESP(player)
     if ESPObjects[player] then
         for _, obj in pairs(ESPObjects[player]) do
             if obj then obj:Remove() end
@@ -196,12 +199,11 @@ for _, player in pairs(Players:GetPlayers()) do
     CreateESP(player)
 end
 
+-- ESP Update
 RunService.RenderStepped:Connect(function()
     if not config.ESPEnabled then
         for _, esp in pairs(ESPObjects) do
-            for _, obj in pairs(esp) do
-                obj.Visible = false
-            end
+            for _, obj in pairs(esp) do obj.Visible = false end
         end
         return
     end
@@ -266,9 +268,7 @@ RunService.RenderStepped:Connect(function()
                     esp.Text.Visible = false
                 end
             else
-                for _, obj in pairs(esp) do
-                    obj.Visible = false
-                end
+                for _, obj in pairs(esp) do obj.Visible = false end
             end
         end
     end
@@ -301,5 +301,5 @@ VisualTab:CreateColorPicker({ Name = "FOV Color", Color = config.FOVColor, Callb
 -- Misc Tab
 MiscTab:CreateToggle({ Name = "Infinite Jump", CurrentValue = config.InfiniteJump, Callback = function(v) config.InfiniteJump = v end })
 
-Rayfield:Notify({ Title="4444 Hub", Content="Script injecté avec options avancées !", Duration=5 })
+Rayfield:Notify({ Title="4444 Hub", Content="Script injecté !", Duration=5 })
 print("[4444 Hub] Script injecté et prêt")
