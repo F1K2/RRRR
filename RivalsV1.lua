@@ -1,5 +1,5 @@
 -- ===========================================
--- 4444 Hub (Complete Safe Version)
+-- 4444 Hub (Safe Version without risky hooks)
 -- ===========================================
 
 -- 🔹 Auto reload après téléport
@@ -15,7 +15,7 @@ end
 
 -- 🔹 Exploit safe
 local mousemoverel = mousemoverel or function() end
-local hookmetamethod = hookmetamethod or hookfunction or function(_, f) return f end
+local safeHook = (hookmetamethod and type(hookmetamethod)=="function") and hookmetamethod or nil
 local getnamecallmethod = getnamecallmethod or function() return "" end
 
 -- Services
@@ -65,7 +65,7 @@ local MiscTab = Window:CreateTab("Misc")
 -- Config
 local config = {
     AimbotEnabled = false,
-    SilentAim = false,
+    SilentAim = false, -- hook safe disabled if exploit not support
     AimbotSmoothness = 6,
     AimbotFOV = 120,
     AimbotPrediction = true,
@@ -123,18 +123,22 @@ local function AimAt(player, part)
     mousemoverel(delta.X, delta.Y)
 end
 
--- ===== Silent Aim Hook =====
-local oldNamecall
-oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
-    local method = getnamecallmethod()
-    if config.SilentAim and method == "FindPartOnRayWithIgnoreList" then
-        local target, part = GetClosestPlayer()
-        if target and part then
-            return part, part.Position
+-- ===== Silent Aim Hook (Safe) =====
+if safeHook then
+    local oldNamecall
+    oldNamecall = safeHook(game, "__namecall", function(self, ...)
+        local method = getnamecallmethod()
+        if config.SilentAim and method == "FindPartOnRayWithIgnoreList" then
+            local target, part = GetClosestPlayer()
+            if target and part then
+                return part, part.Position
+            end
         end
-    end
-    return oldNamecall(self, ...)
-end)
+        return oldNamecall(self, ...)
+    end)
+else
+    print("[4444 Hub] Silent Aim hook disabled (exploit not supported)")
+end
 
 -- ===== FOV Circle =====
 local fovCircle = Drawing.new("Circle")
@@ -303,3 +307,5 @@ MiscTab:CreateToggle({ Name = "Infinite Jump", CurrentValue = config.InfiniteJum
 
 Rayfield:Notify({ Title="4444 Hub", Content="Script injecté !", Duration=5 })
 print("[4444 Hub] Script injecté et prêt")
+
+
