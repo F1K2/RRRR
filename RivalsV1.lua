@@ -1,4 +1,8 @@
--- 🔹 Auto reload après téléport (Rivals)
+-- ===========================================
+-- 4444 Hub (Aimbot + ESP + Infinite Jump + NoClip)
+-- ===========================================
+
+-- 🔹 Auto reload après téléport
 if syn and syn.queue_on_teleport then
     syn.queue_on_teleport([[
         loadstring(game:HttpGet("https://raw.githubusercontent.com/F1K2/RRRR/refs/heads/main/RivalsV1.lua"))()
@@ -16,6 +20,16 @@ local UserInputService = game:GetService("UserInputService")
 local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 
+-- Fonction sécurisée pour attendre le Character
+local function GetCharacter(player)
+    return player.Character or player.CharacterAdded:Wait()
+end
+
+local function GetHRP(player)
+    local char = GetCharacter(player)
+    return char:FindFirstChild("HumanoidRootPart")
+end
+
 -- Charger Rayfield
 local success, Rayfield = pcall(function()
     return loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
@@ -31,7 +45,7 @@ local Window = Rayfield:CreateWindow({
     LoadingTitle = "Loading 4444 Hub..",
     LoadingSubtitle = "ESP + Aimbot",
     ToggleUIKeybind = Enum.KeyCode.RightShift,
-    ConfigurationSaving = { Enabled = true, FolderName = 4444, FileName = "settings" },
+    ConfigurationSaving = { Enabled = true, FolderName = "4444Hub", FileName = "settings" },
     Discord = { Enabled = true, Invite = "rPWv4TQVsV", RememberJoins = false },
     KeySystem = false,
 })
@@ -54,9 +68,10 @@ local config = {
     HealthBar = true,
     DistanceESP = true,
     TeamCheck = false,
-    MaxDistance = 2000, -- distance maximale
+    MaxDistance = 2000,
     InfiniteJump = false,
-    NoClip = false
+    NoClip = false,
+    ShowFOVCircle = true
 }
 
 -- ===== Aimbot =====
@@ -103,17 +118,15 @@ end
 
 -- FOV Circle
 local fovCircle = Drawing.new("Circle")
-fovCircle.Visible = config.AimbotEnabled
-fovCircle.Radius = config.AimbotFOV
 fovCircle.Color = Color3.fromRGB(255,0,0)
 fovCircle.Thickness = 2
 fovCircle.Filled = false
-fovCircle.Position = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
 
 RunService.RenderStepped:Connect(function()
-    fovCircle.Visible = config.AimbotEnabled
+    fovCircle.Visible = config.AimbotEnabled and config.ShowFOVCircle
     fovCircle.Position = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
     fovCircle.Radius = config.AimbotFOV
+
     if config.AimbotEnabled and IsAimbotKeyPressed() then
         local target, part = GetClosestPlayer()
         if target then AimAt(target, part) end
@@ -137,7 +150,6 @@ function CreateESP(player)
     }
 
     local esp = ESPObjects[player]
-
     esp.Box.Thickness = 1.5
     esp.Box.Filled = false
     esp.Box.Visible = false
@@ -185,6 +197,9 @@ RunService.RenderStepped:Connect(function()
         return
     end
 
+    local myHRP = GetHRP(LocalPlayer)
+    if not myHRP then return end
+
     for _, player in pairs(Players:GetPlayers()) do
         if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Head") and player.Character:FindFirstChild("HumanoidRootPart") then
             local esp = ESPObjects[player]
@@ -194,7 +209,7 @@ RunService.RenderStepped:Connect(function()
             local hrp = player.Character.HumanoidRootPart
             local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
 
-            local dist = (hrp.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+            local dist = (hrp.Position - myHRP.Position).Magnitude
             if dist > config.MaxDistance then
                 for _, obj in pairs(esp) do obj.Visible = false end
                 continue
@@ -213,18 +228,15 @@ RunService.RenderStepped:Connect(function()
                 local width = height / 2
                 local topLeft = Vector2.new(headPos.X - width/2, headPos.Y)
 
-                -- Box
                 esp.Box.Visible = config.BoxESP
                 esp.Box.Size = Vector2.new(width, height)
                 esp.Box.Position = topLeft
                 esp.Box.Color = Color3.fromRGB(255,255,255)
 
-                -- Tracer
                 esp.Tracer.Visible = config.Tracers
                 esp.Tracer.From = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y)
                 esp.Tracer.To = Vector2.new(hrpPos.X, hrpPos.Y)
 
-                -- Health Bar
                 if humanoid and config.HealthBar then
                     local healthPct = humanoid.Health / humanoid.MaxHealth
                     esp.HealthBar.Visible = true
@@ -235,7 +247,6 @@ RunService.RenderStepped:Connect(function()
                     esp.HealthBar.Visible = false
                 end
 
-                -- Distance
                 if config.DistanceESP then
                     esp.Text.Visible = true
                     esp.Text.Text = player.Name.." ["..math.floor(dist).."m]"
@@ -255,37 +266,31 @@ end)
 -- ===== Infinite Jump =====
 UserInputService.JumpRequest:Connect(function()
     if config.InfiniteJump then
-        local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+        local char = GetCharacter(LocalPlayer)
         local humanoid = char:FindFirstChildOfClass("Humanoid")
         if humanoid then humanoid:ChangeState(Enum.HumanoidStateType.Jumping) end
     end
 end)
 
 -- ===== NoClip =====
-local cachedParts = {}
-local function UpdateNoClip()
-    local char = LocalPlayer.Character
-    if not char then return end
-    if not cachedParts[char] then
-        cachedParts[char] = {}
-        for _, part in pairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then
-                table.insert(cachedParts[char], part)
+RunService.Stepped:Connect(function()
+    if config.NoClip then
+        local char = LocalPlayer.Character
+        if char then
+            for _, part in pairs(char:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
             end
         end
     end
-    for _, part in pairs(cachedParts[char]) do
-        part.CanCollide = not config.NoClip
-    end
-end
-RunService.Stepped:Connect(UpdateNoClip)
+end)
 
 -- ===== UI Controls =====
 -- Aimbot Tab
 AimTab:CreateToggle({
     Name = "Enable Aimbot", 
     CurrentValue = config.AimbotEnabled, 
-    Flag = "AimbotEnabled", -- clé unique
     Callback = function(v) config.AimbotEnabled = v end
 })
 
@@ -294,7 +299,6 @@ AimTab:CreateSlider({
     Range = {1, 20}, 
     Increment = 1, 
     CurrentValue = config.AimbotSmoothness, 
-    Flag = "AimbotSmoothness", 
     Callback = function(v) config.AimbotSmoothness = v end
 })
 
@@ -303,14 +307,12 @@ AimTab:CreateSlider({
     Range = {50, 600}, 
     Increment = 10, 
     CurrentValue = config.AimbotFOV, 
-    Flag = "AimbotFOV", 
     Callback = function(v) config.AimbotFOV = v end
 })
 
 AimTab:CreateToggle({
     Name = "Prediction", 
     CurrentValue = config.AimbotPrediction, 
-    Flag = "AimbotPrediction", 
     Callback = function(v) config.AimbotPrediction = v end
 })
 
@@ -318,7 +320,6 @@ AimTab:CreateDropdown({
     Name = "Target Part", 
     Options = {"Head", "Torso", "HumanoidRootPart"}, 
     CurrentOption = {config.AimbotTargetPart}, 
-    Flag = "AimbotTargetPart", 
     Callback = function(opt) config.AimbotTargetPart = opt[1] end
 })
 
@@ -326,28 +327,25 @@ AimTab:CreateDropdown({
 VisualTab:CreateToggle({
     Name = "Enable ESP", 
     CurrentValue = config.ESPEnabled, 
-    Flag = "ESPEnabled", 
-    Callback = function(v) 
-        config.ESPEnabled = v
-        for _, obj in pairs(ESPObjects) do
-            obj.highlight.Enabled = v
-            obj.billboard.Enabled = v
-        end
-    end
+    Callback = function(v) config.ESPEnabled = v end
+})
+
+VisualTab:CreateToggle({
+    Name = "Show FOV Circle", 
+    CurrentValue = config.ShowFOVCircle, 
+    Callback = function(v) config.ShowFOVCircle = v end
 })
 
 -- Player Tab
 PlayerTab:CreateToggle({
     Name = "Infinite Jump", 
     CurrentValue = config.InfiniteJump, 
-    Flag = "InfiniteJump", 
     Callback = function(v) config.InfiniteJump = v end
 })
 
 PlayerTab:CreateToggle({
     Name = "NoClip", 
     CurrentValue = config.NoClip, 
-    Flag = "NoClip", 
     Callback = function(v) config.NoClip = v end
 })
 
