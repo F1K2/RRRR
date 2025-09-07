@@ -1,5 +1,5 @@
 -- ===========================================
--- 4444 Hub (Aimbot + ESP + Infinite Jump + NoClip)
+-- 4444 Hub (Aimbot + ESP + Advanced Features)
 -- ===========================================
 
 -- 🔹 Auto reload après téléport
@@ -20,7 +20,7 @@ local UserInputService = game:GetService("UserInputService")
 local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 
--- Fonction sécurisée pour attendre le Character
+-- 🔹 Fonctions sécurisées
 local function GetCharacter(player)
     return player.Character or player.CharacterAdded:Wait()
 end
@@ -30,7 +30,7 @@ local function GetHRP(player)
     return char:FindFirstChild("HumanoidRootPart")
 end
 
--- Charger Rayfield
+-- 🔹 Charger Rayfield
 local success, Rayfield = pcall(function()
     return loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 end)
@@ -39,12 +39,12 @@ if not success or not Rayfield then
     return
 end
 
--- Fenêtre principale
+-- 🔹 Fenêtre principale
 local Window = Rayfield:CreateWindow({
     Name = "4444 Hub",
     LoadingTitle = "Loading 4444 Hub..",
     LoadingSubtitle = "ESP + Aimbot",
-    ToggleUIKeybind = Enum.KeyCode.RightShift,
+    ToggleUIKeybind = Enum.KeyCode.RightShift, -- toggle UI
     ConfigurationSaving = { Enabled = true, FolderName = "4444Hub", FileName = "settings" },
     Discord = { Enabled = true, Invite = "rPWv4TQVsV", RememberJoins = false },
     KeySystem = false,
@@ -53,11 +53,12 @@ local Window = Rayfield:CreateWindow({
 -- Tabs
 local AimTab = Window:CreateTab("Aimbot")
 local VisualTab = Window:CreateTab("ESP")
-local PlayerTab = Window:CreateTab("Player")
+local MiscTab = Window:CreateTab("Misc")
 
 -- Config
 local config = {
     AimbotEnabled = false,
+    SilentAim = false,
     AimbotSmoothness = 6,
     AimbotFOV = 120,
     AimbotPrediction = true,
@@ -70,11 +71,12 @@ local config = {
     TeamCheck = false,
     MaxDistance = 2000,
     InfiniteJump = false,
-    NoClip = false,
-    ShowFOVCircle = true
+    ShowFOVCircle = true,
+    FOVColor = Color3.fromRGB(255,0,0),
+    ESPColor = Color3.fromRGB(255,255,255)
 }
 
--- ===== Aimbot =====
+-- ===== Aimbot & Silent Aim =====
 local function IsAimbotKeyPressed()
     return UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
 end
@@ -116,18 +118,31 @@ local function AimAt(player, part)
     end
 end
 
+-- 🔹 Silent Aim Hook
+local oldNamecall
+oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+    local method = getnamecallmethod()
+    if config.SilentAim and method == "FindPartOnRayWithIgnoreList" then
+        local target, part = GetClosestPlayer()
+        if target and part then
+            return part, part.Position
+        end
+    end
+    return oldNamecall(self, ...)
+end)
+
 -- FOV Circle
 local fovCircle = Drawing.new("Circle")
-fovCircle.Color = Color3.fromRGB(255,0,0)
 fovCircle.Thickness = 2
 fovCircle.Filled = false
 
 RunService.RenderStepped:Connect(function()
     fovCircle.Visible = config.AimbotEnabled and config.ShowFOVCircle
+    fovCircle.Color = config.FOVColor
     fovCircle.Position = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
     fovCircle.Radius = config.AimbotFOV
 
-    if config.AimbotEnabled and IsAimbotKeyPressed() then
+    if config.AimbotEnabled and IsAimbotKeyPressed() and not config.SilentAim then
         local target, part = GetClosestPlayer()
         if target then AimAt(target, part) end
     end
@@ -153,10 +168,8 @@ function CreateESP(player)
     esp.Box.Thickness = 1.5
     esp.Box.Filled = false
     esp.Box.Visible = false
-    esp.Box.Color = Color3.fromRGB(255, 255, 255)
 
     esp.Tracer.Thickness = 1.5
-    esp.Tracer.Color = Color3.fromRGB(255, 255, 255)
     esp.Tracer.Visible = false
 
     esp.HealthBar.Thickness = 3
@@ -165,7 +178,6 @@ function CreateESP(player)
     esp.Text.Size = 14
     esp.Text.Center = true
     esp.Text.Outline = true
-    esp.Text.Color = Color3.fromRGB(255, 255, 255)
     esp.Text.Visible = false
 end
 
@@ -184,9 +196,6 @@ for _, player in pairs(Players:GetPlayers()) do
     CreateESP(player)
 end
 
--- ===========================================
--- ESP Update Loop
--- ===========================================
 RunService.RenderStepped:Connect(function()
     if not config.ESPEnabled then
         for _, esp in pairs(ESPObjects) do
@@ -231,11 +240,12 @@ RunService.RenderStepped:Connect(function()
                 esp.Box.Visible = config.BoxESP
                 esp.Box.Size = Vector2.new(width, height)
                 esp.Box.Position = topLeft
-                esp.Box.Color = Color3.fromRGB(255,255,255)
+                esp.Box.Color = config.ESPColor
 
                 esp.Tracer.Visible = config.Tracers
                 esp.Tracer.From = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y)
                 esp.Tracer.To = Vector2.new(hrpPos.X, hrpPos.Y)
+                esp.Tracer.Color = config.ESPColor
 
                 if humanoid and config.HealthBar then
                     local healthPct = humanoid.Health / humanoid.MaxHealth
@@ -251,6 +261,7 @@ RunService.RenderStepped:Connect(function()
                     esp.Text.Visible = true
                     esp.Text.Text = player.Name.." ["..math.floor(dist).."m]"
                     esp.Text.Position = Vector2.new(headPos.X, topLeft.Y - 15)
+                    esp.Text.Color = config.ESPColor
                 else
                     esp.Text.Visible = false
                 end
@@ -272,82 +283,23 @@ UserInputService.JumpRequest:Connect(function()
     end
 end)
 
--- ===== NoClip =====
-RunService.Stepped:Connect(function()
-    if config.NoClip then
-        local char = LocalPlayer.Character
-        if char then
-            for _, part in pairs(char:GetDescendants()) do
-                if part:IsA("BasePart") then
-                    part.CanCollide = false
-                end
-            end
-        end
-    end
-end)
-
 -- ===== UI Controls =====
 -- Aimbot Tab
-AimTab:CreateToggle({
-    Name = "Enable Aimbot", 
-    CurrentValue = config.AimbotEnabled, 
-    Callback = function(v) config.AimbotEnabled = v end
-})
-
-AimTab:CreateSlider({
-    Name = "Smoothness", 
-    Range = {1, 20}, 
-    Increment = 1, 
-    CurrentValue = config.AimbotSmoothness, 
-    Callback = function(v) config.AimbotSmoothness = v end
-})
-
-AimTab:CreateSlider({
-    Name = "FOV", 
-    Range = {50, 600}, 
-    Increment = 10, 
-    CurrentValue = config.AimbotFOV, 
-    Callback = function(v) config.AimbotFOV = v end
-})
-
-AimTab:CreateToggle({
-    Name = "Prediction", 
-    CurrentValue = config.AimbotPrediction, 
-    Callback = function(v) config.AimbotPrediction = v end
-})
-
-AimTab:CreateDropdown({
-    Name = "Target Part", 
-    Options = {"Head", "Torso", "HumanoidRootPart"}, 
-    CurrentOption = {config.AimbotTargetPart}, 
-    Callback = function(opt) config.AimbotTargetPart = opt[1] end
-})
+AimTab:CreateToggle({ Name = "Enable Aimbot", CurrentValue = config.AimbotEnabled, Callback = function(v) config.AimbotEnabled = v end })
+AimTab:CreateToggle({ Name = "Silent Aim", CurrentValue = config.SilentAim, Callback = function(v) config.SilentAim = v end })
+AimTab:CreateSlider({ Name = "Smoothness", Range = {1, 20}, Increment = 1, CurrentValue = config.AimbotSmoothness, Callback = function(v) config.AimbotSmoothness = v end })
+AimTab:CreateSlider({ Name = "FOV", Range = {50, 600}, Increment = 10, CurrentValue = config.AimbotFOV, Callback = function(v) config.AimbotFOV = v end })
+AimTab:CreateToggle({ Name = "Prediction", CurrentValue = config.AimbotPrediction, Callback = function(v) config.AimbotPrediction = v end })
+AimTab:CreateDropdown({ Name = "Target Part", Options = {"Head", "Torso", "HumanoidRootPart"}, CurrentOption = {config.AimbotTargetPart}, Callback = function(opt) config.AimbotTargetPart = opt[1] end })
 
 -- ESP Tab
-VisualTab:CreateToggle({
-    Name = "Enable ESP", 
-    CurrentValue = config.ESPEnabled, 
-    Callback = function(v) config.ESPEnabled = v end
-})
+VisualTab:CreateToggle({ Name = "Enable ESP", CurrentValue = config.ESPEnabled, Callback = function(v) config.ESPEnabled = v end })
+VisualTab:CreateToggle({ Name = "Show FOV Circle", CurrentValue = config.ShowFOVCircle, Callback = function(v) config.ShowFOVCircle = v end })
+VisualTab:CreateColorPicker({ Name = "ESP Color", Color = config.ESPColor, Callback = function(c) config.ESPColor = c end })
+VisualTab:CreateColorPicker({ Name = "FOV Color", Color = config.FOVColor, Callback = function(c) config.FOVColor = c end })
 
-VisualTab:CreateToggle({
-    Name = "Show FOV Circle", 
-    CurrentValue = config.ShowFOVCircle, 
-    Callback = function(v) config.ShowFOVCircle = v end
-})
+-- Misc Tab
+MiscTab:CreateToggle({ Name = "Infinite Jump", CurrentValue = config.InfiniteJump, Callback = function(v) config.InfiniteJump = v end })
 
--- Player Tab
-PlayerTab:CreateToggle({
-    Name = "Infinite Jump", 
-    CurrentValue = config.InfiniteJump, 
-    Callback = function(v) config.InfiniteJump = v end
-})
-
-PlayerTab:CreateToggle({
-    Name = "NoClip", 
-    CurrentValue = config.NoClip, 
-    Callback = function(v) config.NoClip = v end
-})
-
-Rayfield:Notify({ Title="4444 Hub", Content="Script injecté !", Duration=5 })
+Rayfield:Notify({ Title="4444 Hub", Content="Script injecté avec options avancées !", Duration=5 })
 print("[4444 Hub] Script injecté et prêt")
