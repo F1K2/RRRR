@@ -411,17 +411,25 @@ config.FlyEnabled = false
 config.FlySpeed = 5
 
 local flyConn
+
+local function StopFly()
+    if flyConn then
+        flyConn:Disconnect()
+        flyConn = nil
+    end
+    local hrp = GetHRP(LocalPlayer)
+    if hrp then
+        hrp.Velocity = Vector3.new(0,0,0)
+    end
+end
+
 local function StartFly()
-    local char = GetCharacter(LocalPlayer)
-    if not char then return end
+    StopFly() -- éviter doublons
     local hrp = GetHRP(LocalPlayer)
     if not hrp then return end
 
-    -- Déconnecter ancien fly si déjà actif
-    if flyConn then flyConn:Disconnect() flyConn = nil end
-
     flyConn = RunService.RenderStepped:Connect(function()
-        if config.FlyEnabled and hrp then
+        if config.FlyEnabled and hrp and hrp.Parent then
             local cam = Workspace.CurrentCamera
             local move = Vector3.new()
 
@@ -449,8 +457,6 @@ local function StartFly()
             else
                 hrp.Velocity = Vector3.new(0,0,0)
             end
-        elseif hrp then
-            hrp.Velocity = Vector3.new(0, hrp.Velocity.Y, 0) -- retour normal
         end
     end)
 end
@@ -459,13 +465,18 @@ local function ToggleFly(state)
     config.FlyEnabled = state
     if state then
         StartFly()
-    elseif flyConn then
-        flyConn:Disconnect()
-        flyConn = nil
-        local hrp = GetHRP(LocalPlayer)
-        if hrp then hrp.Velocity = Vector3.new(0,0,0) end
+    else
+        StopFly()
     end
 end
+
+-- 🔁 Réactiver automatiquement après respawn
+LocalPlayer.CharacterAdded:Connect(function()
+    if config.FlyEnabled then
+        task.wait(1) -- petit délai pour laisser charger HRP
+        StartFly()
+    end
+end)
 
 -- ===== UI Controls =====
 -- Aimbot Tab
