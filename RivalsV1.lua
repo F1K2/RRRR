@@ -115,11 +115,11 @@ local MiscTab = Window:CreateTab("Misc")
 
 -- Config
 local config = {
-    AimbotEnabled = false,
+    AimbotEnabled = true,
     SilentAim = false,
-    AimbotSmoothness = 6,
-    AimbotFOV = 120,
-    AimbotPrediction = true,
+    AimbotSmoothness = 1,
+    AimbotFOV = 600,
+    AimbotPrediction = false,
     AimbotTargetPart = "Head",
     ESPEnabled = true,
     BoxESP = true,
@@ -407,8 +407,8 @@ RunService.Stepped:Connect(function()
 end)
 
 -- ===== Fly =====
-config.FlyEnabled = false
-config.FlySpeed = 5
+config.FlyEnabled = true
+config.FlySpeed = 15
 
 local flyConn
 
