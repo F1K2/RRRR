@@ -1,16 +1,493 @@
---[[
- .____                  ________ ___.    _____                           __                
- |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
- |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
- |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
- |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
-         \/          \/         \/    \/                \/     \/     \/                   
-          \_Welcome to LuaObfuscator.com   (Alpha 0.10.9) ~  Much Love, Ferib 
-
-]]--
-
-if (syn and syn.queue_on_teleport) then syn.queue_on_teleport([[
+-- Auto reload après téléport
+if syn and syn.queue_on_teleport then
+    syn.queue_on_teleport([[
         loadstring(game:HttpGet("https://raw.githubusercontent.com/F1K2/RRRR/refs/heads/main/RivalsV1.lua"))()
-    ]]);elseif queue_on_teleport then queue_on_teleport([[
+    ]])
+elseif queue_on_teleport then
+    queue_on_teleport([[
         loadstring(game:HttpGet("https://raw.githubusercontent.com/F1K2/RRRR/refs/heads/main/RivalsV1.lua"))()
-    ]]);end local v0=mousemoverel or function() end ;local v1=(hookmetamethod and (type(hookmetamethod)=="function") and hookmetamethod) or nil ;local v2=getnamecallmethod or function() return "";end ;local v3=game:GetService("Players");local v4=game:GetService("RunService");local v5=game:GetService("UserInputService");local v6=game:GetService("Workspace");local v7=v3.LocalPlayer;while  not v7 do local v28=0;while true do if (v28==(0 + 0)) then v4.Heartbeat:Wait();v7=v3.LocalPlayer;break;end end end local v8=v6.CurrentCamera;while  not v8 do local v29=0 + 0 ;while true do if (v29==0) then v4.Heartbeat:Wait();v8=v6.CurrentCamera;break;end end end local function v9(v30) if  not v30 then return nil;end return v30.Character or v30.CharacterAdded:Wait() ;end local function v10(v31) local v32=0 -0 ;local v33;local v34;local v35;while true do if (v32==(1709 -(71 + 1638))) then if  not v31 then return nil;end v33=nil;v32=2 -1 ;end if (v32==2) then if  not v33 then return nil;end return v33:FindFirstChild("HumanoidRootPart");end if (v32==(1 + 0)) then v34,v35=pcall(function() return v9(v31);end);if v34 then v33=v35;end v32=9 -7 ;end end end local v11,v12=pcall(function() return loadstring(game:HttpGet("https://sirius.menu/rayfield"))();end);if ( not v11 or  not v12) then warn("[4444 Hub] Rayfield n'a pas pu être chargé. UI désactivée.");v12={CreateWindow=function() return {CreateTab=function() return {};end};end,Notify=function() end};end local v13=v12:CreateWindow({Name="4444 Hub",LoadingTitle="Loading 4444 Hub..",LoadingSubtitle="Enjoy the script!",ToggleUIKeybind=Enum.KeyCode.RightShift,ConfigurationSaving={Enabled=true,FolderName="4444Hub",FileName="settings"}});local v14=v13:CreateTab("Aimbot");local v15=v13:CreateTab("ESP");local v16=v13:CreateTab("Misc");local v17={AimbotEnabled=false,SilentAim=false,AimbotSmoothness=6,AimbotFOV=42 + 78 ,AimbotPrediction=true,AimbotTargetPart="Head",ESPEnabled=true,BoxESP=true,Tracers=true,HealthBar=true,DistanceESP=true,TeamCheck=false,MaxDistance=1334 + 666 ,InfiniteJump=false,ShowFOVCircle=true,FOVColor=Color3.fromRGB(255,0 -0 ,0 + 0 ),ESPColor=Color3.fromRGB(1385 -(87 + 1043) ,703 -(10 + 438) ,255)};local function v18() return v5:IsMouseButtonPressed(Enum.UserInputType.MouseButton2);end local function v19() local v36=Vector2.new(v8.ViewportSize.X/(2 + 0) ,v8.ViewportSize.Y/2 );local v37,v38,v39=nil,nil,math.huge;for v81,v82 in ipairs(v3:GetPlayers()) do if (v82~=v7) then local v93=0;local v94;while true do if ((0 -0)==v93) then v94=v82.Character;if (v94 and v94:FindFirstChild(v17.AimbotTargetPart)) then local v141=v94:FindFirstChildOfClass("Humanoid");if (v141 and (v141.Health>(0 + 0))) then local v149=1180 -(1123 + 57) ;local v150;while true do if (v149==(0 + 0)) then v150=v94[v17.AimbotTargetPart];if v150 then local v166=254 -(163 + 91) ;local v167;local v168;while true do if (v166==(1930 -(1869 + 61))) then v167,v168=v8:WorldToViewportPoint(v150.Position);if v168 then local v189=0 + 0 ;local v190;while true do if (v189==0) then v190=(Vector2.new(v167.X,v167.Y) -v36).Magnitude;if ((v190<v39) and (v190<=v17.AimbotFOV)) then local v205=0;while true do if ((3 -2)==v205) then v39=v190;break;end if ((0 -0)==v205) then v37=v82;v38=v150;v205=1 + 0 ;end end end break;end end end break;end end end break;end end end end break;end end end end return v37,v38;end local function v20(v40,v41) local v42=0 -0 ;local v43;local v44;local v45;local v46;while true do if (v42==(3 + 0)) then if (v0 and (type(v0)=="function")) then pcall(function() v0(v46.X,v46.Y);end);end break;end if (v42==1) then if (v17.AimbotPrediction and v40.Character:FindFirstChild("HumanoidRootPart")) then local v121=1474 -(1329 + 145) ;local v122;while true do if (v121==(971 -(140 + 831))) then v122=v40.Character:FindFirstChild("HumanoidRootPart");if v122 then v43=v43 + (v122.Velocity * 0.05) ;end break;end end end v44=v8:WorldToViewportPoint(v43);v42=1852 -(1409 + 441) ;end if (v42==(720 -(15 + 703))) then v45=v5:GetMouseLocation();v46=(Vector2.new(v44.X,v44.Y) -v45)/v17.AimbotSmoothness ;v42=2 + 1 ;end if (v42==0) then if ( not v41 or  not v40 or  not v40.Character) then return;end v43=v41.Position;v42=439 -(262 + 176) ;end end end if v1 then local v83;v83=v1(game,"__namecall",function(v86,...) local v87=0;local v88;while true do if (v87==(1722 -(345 + 1376))) then return v83(v86,...);end if (v87==0) then v88=v2();if (v17.SilentAim and (v88=="FindPartOnRayWithIgnoreList")) then local v132=0;local v133;local v134;while true do if (0==v132) then v133,v134=v19();if (v133 and v134) then return v83(v86,...);end break;end end end v87=1;end end end);else print("[4444 Hub] Silent Aim hook disabled (exploit not supported)");end local v21=Drawing.new("Circle");v21.Thickness=690 -(198 + 490) ;v21.Filled=false;v21.Visible=false;v4.RenderStepped:Connect(function() local v47=0 -0 ;while true do if (v47==0) then if  not v8 then local v123=0 -0 ;while true do if (v123==(1206 -(696 + 510))) then v8=v6.CurrentCamera;if  not v8 then return;end break;end end end v21.Visible=v17.AimbotEnabled and v17.ShowFOVCircle ;v47=1 -0 ;end if (v47==(1263 -(1091 + 171))) then v21.Color=v17.FOVColor;v21.Position=Vector2.new(v8.ViewportSize.X/(1 + 1) ,v8.ViewportSize.Y/(6 -4) );v47=2;end if (v47==2) then v21.Radius=v17.AimbotFOV;if (v17.AimbotEnabled and v18() and  not v17.SilentAim) then local v124=0 -0 ;local v125;local v126;while true do if (v124==(374 -(123 + 251))) then v125,v126=v19();if (v125 and v126) then v20(v125,v126);end break;end end end break;end end end);local v25={};local function v26(v48) local v49=0 -0 ;local v50;while true do if (v49==(699 -(208 + 490))) then v50.Box.Thickness=1.5 + 0 ;v50.Box.Filled=false;v50.Box.Visible=false;v50.Tracer.Thickness=1.5 + 0 ;v49=838 -(660 + 176) ;end if (v49==(1 + 1)) then v50.Tracer.Visible=false;v50.HealthBar.Thickness=205 -(14 + 188) ;v50.HealthBar.Visible=false;v50.Text.Size=689 -(534 + 141) ;v49=3;end if (v49==3) then v50.Text.Center=true;v50.Text.Outline=true;v50.Text.Visible=false;break;end if (v49==(0 + 0)) then if ( not v48 or (v48==v7)) then return;end if v25[v48] then return;end v25[v48]={Box=Drawing.new("Square"),Tracer=Drawing.new("Line"),HealthBar=Drawing.new("Line"),Text=Drawing.new("Text")};v50=v25[v48];v49=1;end end end local function v27(v51) local v52=0;while true do if (v52==(0 + 0)) then if  not v51 then return;end if v25[v51] then local v127=0 + 0 ;while true do if (0==v127) then for v146,v147 in pairs(v25[v51]) do if v147 then pcall(function() v147:Remove();end);end end v25[v51]=nil;break;end end end break;end end end v3.PlayerAdded:Connect(function(v53) v26(v53);end);v3.PlayerRemoving:Connect(function(v54) v27(v54);end);for v55,v56 in pairs(v3:GetPlayers()) do v26(v56);end v4.RenderStepped:Connect(function() if  not v17.ESPEnabled then local v89=0;while true do if (v89==(0 -0)) then for v130,v131 in pairs(v25) do for v135,v136 in pairs(v131) do if v136 then pcall(function() v136.Visible=false;end);end end end return;end end end local v57=v10(v7);if  not v57 then for v114,v115 in pairs(v25) do for v117,v118 in pairs(v115) do if v118 then pcall(function() v118.Visible=false;end);end end end return;end for v84,v85 in pairs(v3:GetPlayers()) do if (v85==v7) then else local v116=v85.Character;if (v116 and v116:FindFirstChild("Head") and v116:FindFirstChild("HumanoidRootPart")) then local v128=v25[v85];if v128 then local v138=v116.Head;local v139=v116.HumanoidRootPart;local v140=v116:FindFirstChildOfClass("Humanoid");if  not v140 then for v152,v153 in pairs(v128) do if v153 then pcall(function() v153.Visible=false;end);end end else local v148=(v139.Position-v57.Position).Magnitude;if (v148>v17.MaxDistance) then for v155,v156 in pairs(v128) do if v156 then pcall(function() v156.Visible=false;end);end end elseif (v17.TeamCheck and (v85.Team==v7.Team)) then for v164,v165 in pairs(v128) do if v165 then pcall(function() v165.Visible=false;end);end end else local v159=0 -0 ;local v160;local v161;local v162;local v163;while true do if (v159==(0 -0)) then v160,v161=v8:WorldToViewportPoint(v138.Position + Vector3.new(0 + 0 ,0.5,0) );v162,v163=v8:WorldToViewportPoint(v139.Position-Vector3.new(0,v140.HipHeight or 0 ,0 + 0 ) );v159=1;end if (v159==1) then if (v161 and v163) then local v171=math.abs(v160.Y-v162.Y );local v172=v171/2 ;local v173=Vector2.new(v160.X-(v172/(398 -(115 + 281))) ,v160.Y);v128.Box.Visible=v17.BoxESP;v128.Box.Size=Vector2.new(v172,v171);v128.Box.Position=v173;v128.Box.Color=v17.ESPColor;v128.Tracer.Visible=v17.Tracers;v128.Tracer.From=Vector2.new(v8.ViewportSize.X/(4 -2) ,v8.ViewportSize.Y);v128.Tracer.To=Vector2.new(v162.X,v162.Y);v128.Tracer.Color=v17.ESPColor;if (v140 and v17.HealthBar) then local v191=0 + 0 ;local v192;while true do if (v191==(0 -0)) then v192=math.clamp(v140.Health/(((v140.MaxHealth~=(0 -0)) and v140.MaxHealth) or 1) ,0,868 -(550 + 317) );v128.HealthBar.Visible=true;v191=1 -0 ;end if (v191==(1 -0)) then v128.HealthBar.From=Vector2.new(v173.X-(13 -8) ,v173.Y + v171 );v128.HealthBar.To=Vector2.new(v173.X-(290 -(134 + 151)) ,v173.Y + (v171 * ((1666 -(970 + 695)) -v192)) );v191=3 -1 ;end if (v191==(1992 -(582 + 1408))) then v128.HealthBar.Color=Color3.fromRGB(255 * ((3 -2) -v192) ,(320 -65) * v192 ,0 -0 );break;end end else v128.HealthBar.Visible=false;end if v17.DistanceESP then v128.Text.Visible=true;v128.Text.Text=v85.Name   .. " ["   .. math.floor(v148)   .. "m]" ;v128.Text.Position=Vector2.new(v160.X,v173.Y-(1839 -(1195 + 629)) );v128.Text.Color=v17.ESPColor;else v128.Text.Visible=false;end else v128.Box.Visible=false;v128.Tracer.Visible=false;v128.HealthBar.Visible=false;v128.Text.Visible=false;end break;end end end end end elseif v25[v85] then for v144,v145 in pairs(v25[v85]) do if v145 then pcall(function() v145.Visible=false;end);end end end end end end);v5.JumpRequest:Connect(function() if v17.InfiniteJump then local v90=v9(v7);if v90 then local v119=0 -0 ;local v120;while true do if (v119==0) then v120=v90:FindFirstChildOfClass("Humanoid");if v120 then pcall(function() v120:ChangeState(Enum.HumanoidStateType.Jumping);end);end break;end end end end end);v14:CreateToggle({Name="Enable Aimbot",CurrentValue=v17.AimbotEnabled,Callback=function(v58) v17.AimbotEnabled=v58;end});v14:CreateToggle({Name="Silent Aim (don't work for the moment !)",CurrentValue=v17.SilentAim,Callback=function(v60) v17.SilentAim=v60;end});v14:CreateSlider({Name="Smoothness",Range={242 -(187 + 54) ,20},Increment=1 + 0 ,CurrentValue=v17.AimbotSmoothness,Callback=function(v62) v17.AimbotSmoothness=v62;end});v14:CreateSlider({Name="FOV",Range={34 + 16 ,600},Increment=16 -6 ,CurrentValue=v17.AimbotFOV,Callback=function(v64) v17.AimbotFOV=v64;end});v14:CreateToggle({Name="Prediction",CurrentValue=v17.AimbotPrediction,Callback=function(v66) v17.AimbotPrediction=v66;end});v14:CreateDropdown({Name="Target Part",Options={"Head","Torso","HumanoidRootPart"},CurrentOption={v17.AimbotTargetPart},Callback=function(v68) v17.AimbotTargetPart=v68[1];end});v15:CreateToggle({Name="Enable ESP",CurrentValue=v17.ESPEnabled,Callback=function(v71) v17.ESPEnabled=v71;end});v15:CreateToggle({Name="Show FOV Circle",CurrentValue=v17.ShowFOVCircle,Callback=function(v73) v17.ShowFOVCircle=v73;end});v15:CreateColorPicker({Name="ESP Color",Color=v17.ESPColor,Callback=function(v75) v17.ESPColor=v75;end});v15:CreateColorPicker({Name="FOV Color",Color=v17.FOVColor,Callback=function(v77) v17.FOVColor=v77;end});v16:CreateToggle({Name="Infinite Jump",CurrentValue=v17.InfiniteJump,Callback=function(v79) v17.InfiniteJump=v79;end});v12:Notify({Title="4444 Hub",Content="Script injecté !",Duration=1005 -(451 + 549) });print("[4444 Hub] Script injecté !");
+    ]])
+end
+
+local mousemoverel = mousemoverel or function() end
+local safeHook = (hookmetamethod and type(hookmetamethod)=="function") and hookmetamethod or nil
+local getnamecallmethod = getnamecallmethod or function() return "" end
+
+-- Services
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+
+-- Wait for LocalPlayer
+local LocalPlayer = Players.LocalPlayer
+while not LocalPlayer do
+    RunService.Heartbeat:Wait()
+    LocalPlayer = Players.LocalPlayer
+end
+
+-- Wait for current camera
+local Camera = Workspace.CurrentCamera
+while not Camera do
+    RunService.Heartbeat:Wait()
+    Camera = Workspace.CurrentCamera
+end
+
+-- Utility: safe get character / HRP
+local function GetCharacter(player)
+    if not player then return nil end
+    -- if Character exists return it, otherwise wait for it
+    return player.Character or player.CharacterAdded:Wait()
+end
+
+local function GetHRP(player)
+    if not player then return nil end
+    local char = nil
+    -- pcall so we don't error if CharacterAdded yields unexpectedly nil
+    local ok, result = pcall(function() return GetCharacter(player) end)
+    if ok then char = result end
+    if not char then return nil end
+    return char:FindFirstChild("HumanoidRootPart")
+end
+
+-- Rayfield load (with fallback)
+local success, Rayfield = pcall(function()
+    return loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+end)
+
+if not success or not Rayfield then
+    warn("[4444 Hub] Rayfield n'a pas pu être chargé. UI désactivée.")
+    Rayfield = {
+        CreateWindow = function() return {CreateTab=function() return {} end} end,
+        Notify = function() end
+    }
+end
+
+local Window = Rayfield:CreateWindow({
+    Name = "4444 Hub",
+    LoadingTitle = "Loading 4444 Hub..",
+    LoadingSubtitle = "Enjoy the script!",
+    ToggleUIKeybind = Enum.KeyCode.RightShift,
+    ConfigurationSaving = { Enabled = true, FolderName = "4444Hub", FileName = "settings" },
+})
+
+local Window = Rayfield:CreateWindow({
+   Name = "4444 Hub",
+   Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   LoadingTitle = "Loading 4444 Hub..",
+   LoadingSubtitle = "Enjoy the script!",
+   ShowText = "Rayfield", -- for mobile users to unhide rayfield, change if you'd like
+   Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+
+   ToggleUIKeybind = Enum.KeyCode.RightShift, -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
+
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = 4444, -- Create a custom folder for your hub/game
+      FileName = "4444 Hub"
+   },
+
+   Discord = {
+      Enabled = true, -- Prompt the user to join your Discord server if their executor supports it
+      Invite = "rPWv4TQVsV", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   },
+
+   KeySystem = true, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "4444 Hub",
+      Subtitle = "Key System",
+      Note = "buy your key on discord (discord.gg/rPWv4TQVsV)", -- Use this to tell the user how to get a key
+      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = true, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
+
+-- Tabs
+local AimTab = Window:CreateTab("Aimbot")
+local VisualTab = Window:CreateTab("ESP")
+local MiscTab = Window:CreateTab("Misc")
+
+-- Config
+local config = {
+    AimbotEnabled = false,
+    SilentAim = false,
+    AimbotSmoothness = 6,
+    AimbotFOV = 120,
+    AimbotPrediction = true,
+    AimbotTargetPart = "Head",
+    ESPEnabled = true,
+    BoxESP = true,
+    Tracers = true,
+    HealthBar = true,
+    DistanceESP = true,
+    TeamCheck = false,
+    MaxDistance = 2000,
+    InfiniteJump = false,
+    ShowFOVCircle = true,
+    FOVColor = Color3.fromRGB(255,0,0),
+    ESPColor = Color3.fromRGB(255,255,255),
+    WalkSpeed = 16
+	
+}
+
+-- ===== Aimbot helpers =====
+local function IsAimbotKeyPressed()
+    return UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
+end
+
+local function GetClosestPlayer()
+    local center = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
+    local closest, part, dist = nil, nil, math.huge
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer then
+            local char = p.Character
+            if char and char:FindFirstChild(config.AimbotTargetPart) then
+                local humanoid = char:FindFirstChildOfClass("Humanoid")
+                if humanoid and humanoid.Health > 0 then
+                    local targetPart = char[config.AimbotTargetPart]
+                    if targetPart then
+                        local screenPos, onScreen = Camera:WorldToViewportPoint(targetPart.Position)
+                        if onScreen then
+                            local mag = (Vector2.new(screenPos.X, screenPos.Y) - center).Magnitude
+                            if mag < dist and mag <= config.AimbotFOV then
+                                closest = p
+                                part = targetPart
+                                dist = mag
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return closest, part
+end
+
+local function AimAt(player, part)
+    if not part or not player or not player.Character then return end
+    local aimPos = part.Position
+    if config.AimbotPrediction and player.Character:FindFirstChild("HumanoidRootPart") then
+        local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+        if hrp then aimPos = aimPos + hrp.Velocity * 0.05 end
+    end
+    local screenPos = Camera:WorldToViewportPoint(aimPos)
+    local mousePos = UserInputService:GetMouseLocation()
+    local delta = (Vector2.new(screenPos.X, screenPos.Y) - mousePos) / config.AimbotSmoothness
+    -- protect mousemoverel call
+    if mousemoverel and type(mousemoverel) == "function" then
+        pcall(function() mousemoverel(delta.X, delta.Y) end)
+    end
+end
+
+-- ===== Silent Aim hook (safe pattern) =====
+if safeHook then
+    local oldNamecall
+    oldNamecall = safeHook(game, "__namecall", function(self, ...)
+        local method = getnamecallmethod()
+        if config.SilentAim and method == "FindPartOnRayWithIgnoreList" then
+            local target, part = GetClosestPlayer()
+            if target and part then
+                -- NOTE: returning different shape than original function can break things;
+                -- attempt a minimal safe return (depends on exploit/remote/target game).
+                -- Here we return the original call with the same args to avoid crashing.
+                -- If you want to modify this behavior you need to adapt to the game's ray function signature.
+                return oldNamecall(self, ...)
+            end
+        end
+        return oldNamecall(self, ...)
+    end)
+else
+    print("[4444 Hub] Silent Aim hook disabled (exploit not supported)")
+end
+
+-- ===== FOV Circle (Drawing) =====
+local fovCircle = Drawing.new("Circle")
+fovCircle.Thickness = 2
+fovCircle.Filled = false
+fovCircle.Visible = false
+
+RunService.RenderStepped:Connect(function()
+    -- safe camera check
+    if not Camera then
+        Camera = Workspace.CurrentCamera
+        if not Camera then return end
+    end
+
+    fovCircle.Visible = config.AimbotEnabled and config.ShowFOVCircle
+    fovCircle.Color = config.FOVColor
+    fovCircle.Position = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
+    fovCircle.Radius = config.AimbotFOV
+
+    if config.AimbotEnabled and IsAimbotKeyPressed() and not config.SilentAim then
+        local target, part = GetClosestPlayer()
+        if target and part then
+            AimAt(target, part)
+        end
+    end
+end)
+
+-- ===== ESP =====
+local ESPObjects = {}
+
+local function CreateESP(player)
+    if not player or player == LocalPlayer then return end
+    if ESPObjects[player] then return end
+
+    ESPObjects[player] = {
+        Box = Drawing.new("Square"),
+        Tracer = Drawing.new("Line"),
+        HealthBar = Drawing.new("Line"),
+        Text = Drawing.new("Text"),
+    }
+
+    local esp = ESPObjects[player]
+    esp.Box.Thickness = 1.5
+    esp.Box.Filled = false
+    esp.Box.Visible = false
+
+    esp.Tracer.Thickness = 1.5
+    esp.Tracer.Visible = false
+
+    esp.HealthBar.Thickness = 3
+    esp.HealthBar.Visible = false
+
+    esp.Text.Size = 14
+    esp.Text.Center = true
+    esp.Text.Outline = true
+    esp.Text.Visible = false
+end
+
+local function RemoveESP(player)
+    if not player then return end
+    if ESPObjects[player] then
+        for _, obj in pairs(ESPObjects[player]) do
+            if obj then pcall(function() obj:Remove() end) end
+        end
+        ESPObjects[player] = nil
+    end
+end
+
+Players.PlayerAdded:Connect(function(p) CreateESP(p) end)
+Players.PlayerRemoving:Connect(function(p) RemoveESP(p) end)
+for _, player in pairs(Players:GetPlayers()) do CreateESP(player) end
+
+-- ESP Update
+RunService.RenderStepped:Connect(function()
+    if not config.ESPEnabled then
+        for _, esp in pairs(ESPObjects) do
+            for _, obj in pairs(esp) do
+                if obj then pcall(function() obj.Visible = false end) end
+            end
+        end
+        return
+    end
+
+    local myHRP = GetHRP(LocalPlayer)
+    if not myHRP then
+        -- if we don't have our HRP, hide everything and skip this frame
+        for _, esp in pairs(ESPObjects) do
+            for _, obj in pairs(esp) do
+                if obj then pcall(function() obj.Visible = false end) end
+            end
+        end
+        return
+    end
+
+    for _, player in pairs(Players:GetPlayers()) do
+        if player == LocalPlayer then
+            -- skip self
+        else
+            local char = player.Character
+            if char and char:FindFirstChild("Head") and char:FindFirstChild("HumanoidRootPart") then
+                local esp = ESPObjects[player]
+                if esp then
+                    local head = char.Head
+                    local hrp = char.HumanoidRootPart
+                    local humanoid = char:FindFirstChildOfClass("Humanoid")
+                    if not humanoid then
+                        -- hide if no humanoid
+                        for _, obj in pairs(esp) do if obj then pcall(function() obj.Visible = false end) end end
+                    else
+                        local dist = (hrp.Position - myHRP.Position).Magnitude
+                        if dist > config.MaxDistance then
+                            for _, obj in pairs(esp) do if obj then pcall(function() obj.Visible = false end) end end
+                        elseif config.TeamCheck and player.Team == LocalPlayer.Team then
+                            for _, obj in pairs(esp) do if obj then pcall(function() obj.Visible = false end) end end
+                        else
+                            local headPos, headOnScreen = Camera:WorldToViewportPoint(head.Position + Vector3.new(0,0.5,0))
+                            local hrpPos, hrpOnScreen = Camera:WorldToViewportPoint(hrp.Position - Vector3.new(0, humanoid.HipHeight or 0,0))
+                            if headOnScreen and hrpOnScreen then
+                                local height = math.abs(headPos.Y - hrpPos.Y)
+                                local width = height / 2
+                                local topLeft = Vector2.new(headPos.X - width/2, headPos.Y)
+
+                                -- Box
+                                esp.Box.Visible = config.BoxESP
+                                esp.Box.Size = Vector2.new(width, height)
+                                esp.Box.Position = topLeft
+                                esp.Box.Color = config.ESPColor
+
+                                -- Tracer
+                                esp.Tracer.Visible = config.Tracers
+                                esp.Tracer.From = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y)
+                                esp.Tracer.To = Vector2.new(hrpPos.X, hrpPos.Y)
+                                esp.Tracer.Color = config.ESPColor
+
+                                -- Health Bar
+                                if humanoid and config.HealthBar then
+                                    local healthPct = math.clamp(humanoid.Health / (humanoid.MaxHealth ~= 0 and humanoid.MaxHealth or 1), 0, 1)
+                                    esp.HealthBar.Visible = true
+                                    esp.HealthBar.From = Vector2.new(topLeft.X - 5, topLeft.Y + height)
+                                    esp.HealthBar.To = Vector2.new(topLeft.X - 5, topLeft.Y + height * (1 - healthPct))
+                                    esp.HealthBar.Color = Color3.fromRGB(255*(1-healthPct),255*healthPct,0)
+                                else
+                                    esp.HealthBar.Visible = false
+                                end
+
+                                -- Distance / Name
+                                if config.DistanceESP then
+                                    esp.Text.Visible = true
+                                    esp.Text.Text = player.Name.." ["..math.floor(dist).."m]"
+                                    esp.Text.Position = Vector2.new(headPos.X, topLeft.Y - 15)
+                                    esp.Text.Color = config.ESPColor
+                                else
+                                    esp.Text.Visible = false
+                                end
+                            else
+                                -- off-screen: hide
+                                esp.Box.Visible = false
+                                esp.Tracer.Visible = false
+                                esp.HealthBar.Visible = false
+                                esp.Text.Visible = false
+                            end
+                        end
+                    end
+                end
+            else
+                -- Character not loaded: ensure any possible ESP for this player is hidden
+                if ESPObjects[player] then
+                    for _, obj in pairs(ESPObjects[player]) do if obj then pcall(function() obj.Visible = false end) end end
+                end
+            end
+        end
+    end
+end)
+-- =========================
+-- ===== MISC FEATURES =====
+-- =========================
+
+-- ===== Infinite Jump =====
+UserInputService.JumpRequest:Connect(function()
+    if config.InfiniteJump then
+        local char = GetCharacter(LocalPlayer)
+        if char then
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
+            if humanoid then pcall(function() humanoid:ChangeState(Enum.HumanoidStateType.Jumping) end) end
+        end
+    end
+end)
+
+-- ===== WalkSpeed =====
+RunService.Stepped:Connect(function()
+    if config.WalkSpeed and config.WalkSpeed > 0 then
+        local char = LocalPlayer.Character
+        if char then
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
+            if humanoid and humanoid.WalkSpeed ~= config.WalkSpeed then
+                humanoid.WalkSpeed = config.WalkSpeed
+            end
+        end
+    end
+end)
+
+-- ===== Fly =====
+config.FlyEnabled = false
+config.FlySpeed = 5
+
+local flyConn
+local function StartFly()
+    local char = GetCharacter(LocalPlayer)
+    if not char then return end
+    local hrp = GetHRP(LocalPlayer)
+    if not hrp then return end
+
+    -- Déconnecter ancien fly si déjà actif
+    if flyConn then flyConn:Disconnect() flyConn = nil end
+
+    flyConn = RunService.RenderStepped:Connect(function()
+        if config.FlyEnabled and hrp then
+            local cam = Workspace.CurrentCamera
+            local move = Vector3.new()
+
+            if UserInputService:IsKeyDown(Enum.KeyCode.W) then
+                move = move + (cam.CFrame.LookVector)
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.S) then
+                move = move - (cam.CFrame.LookVector)
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.A) then
+                move = move - (cam.CFrame.RightVector)
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.D) then
+                move = move + (cam.CFrame.RightVector)
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
+                move = move + Vector3.new(0,1,0)
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then
+                move = move + Vector3.new(0,-1,0)
+            end
+
+            if move.Magnitude > 0 then
+                hrp.Velocity = move.Unit * config.FlySpeed * 10
+            else
+                hrp.Velocity = Vector3.new(0,0,0)
+            end
+        elseif hrp then
+            hrp.Velocity = Vector3.new(0, hrp.Velocity.Y, 0) -- retour normal
+        end
+    end)
+end
+
+local function ToggleFly(state)
+    config.FlyEnabled = state
+    if state then
+        StartFly()
+    elseif flyConn then
+        flyConn:Disconnect()
+        flyConn = nil
+        local hrp = GetHRP(LocalPlayer)
+        if hrp then hrp.Velocity = Vector3.new(0,0,0) end
+    end
+end
+
+-- ===== UI Controls =====
+-- Aimbot Tab
+AimTab:CreateToggle({ Name = "Enable Aimbot", CurrentValue = config.AimbotEnabled, Callback = function(v) config.AimbotEnabled = v end })
+AimTab:CreateToggle({ Name = "Silent Aim (don't work for the moment !)", CurrentValue = config.SilentAim, Callback = function(v) config.SilentAim = v end })
+AimTab:CreateSlider({ Name = "Smoothness", Range = {1, 20}, Increment = 1, CurrentValue = config.AimbotSmoothness, Callback = function(v) config.AimbotSmoothness = v end })
+AimTab:CreateSlider({ Name = "FOV", Range = {50, 600}, Increment = 10, CurrentValue = config.AimbotFOV, Callback = function(v) config.AimbotFOV = v end })
+AimTab:CreateToggle({ Name = "Prediction", CurrentValue = config.AimbotPrediction, Callback = function(v) config.AimbotPrediction = v end })
+AimTab:CreateDropdown({ Name = "Target Part", Options = {"Head", "Torso", "HumanoidRootPart"}, CurrentOption = {config.AimbotTargetPart}, Callback = function(opt) config.AimbotTargetPart = opt[1] end })
+
+-- ESP Tab
+VisualTab:CreateToggle({ Name = "Enable ESP", CurrentValue = config.ESPEnabled, Callback = function(v) config.ESPEnabled = v end })
+VisualTab:CreateToggle({ Name = "Show FOV Circle", CurrentValue = config.ShowFOVCircle, Callback = function(v) config.ShowFOVCircle = v end })
+VisualTab:CreateColorPicker({ Name = "ESP Color", Color = config.ESPColor, Callback = function(c) config.ESPColor = c end })
+VisualTab:CreateColorPicker({ Name = "FOV Color", Color = config.FOVColor, Callback = function(c) config.FOVColor = c end })
+
+-- Misc Tab
+MiscTab:CreateToggle({ Name = "Infinite Jump", CurrentValue = config.InfiniteJump, Callback = function(v) config.InfiniteJump = v end })
+MiscTab:CreateSlider({ Name = "WalkSpeed", Range = {16, 200}, Increment = 1, CurrentValue = config.WalkSpeed, Callback = function(v) config.WalkSpeed = v end })
+MiscTab:CreateToggle({ Name = "Fly", CurrentValue = config.FlyEnabled, Callback = function(v) ToggleFly(v) end })
+MiscTab:CreateSlider({ Name = "Fly Speed", Range = {1, 50}, Increment = 1, CurrentValue = config.FlySpeed, Callback = function(v) config.FlySpeed = v end })
+
+Rayfield:Notify({ Title="4444 Hub", Content="Script injecté !", Duration=5 })
+print("[4444 Hub] Script injecté !")
+
